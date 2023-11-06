@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
 import { List, ListItem, ListItemText, Theme } from '@mui/material';
 import { isSameDay } from 'date-fns';
+import React from 'react';
 import { DateRange, DefinedRange } from '../types';
 
 type DefinedRangesProps = {
