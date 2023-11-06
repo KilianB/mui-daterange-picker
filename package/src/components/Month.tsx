@@ -1,5 +1,5 @@
-import React from "react";
-import { Paper, Grid, Typography } from "@mui/material";
+import React, { ReactNode } from "react";
+import { Paper, Grid, Typography, SelectProps, Theme } from "@mui/material";
 import {
   getDate, isSameMonth, isToday, format, isWithinInterval
 } from "date-fns";
@@ -34,6 +34,29 @@ interface MonthProps {
     onMonthNavigate: (marker: symbol, action: NavigationAction) => void;
   };
   locale?: Locale;
+  MonthHeaderProps?: {
+    containerJustifyContent?: string;
+    containerGap?: any;
+    navWrapPadding?: any;
+    navPadding?: any;
+    // eslint-disable-next-line no-unused-vars
+    renderPrevIcon?: (disabled?: boolean) => ReactNode;
+    // eslint-disable-next-line no-unused-vars
+    renderNextIcon?: (disabled?: boolean) => ReactNode;
+    selectProps?: SelectProps<number>;
+  }
+  DayProps?: {
+    color?: {
+      // eslint-disable-next-line no-unused-vars
+      filledBg?: string | ((theme: Theme) => string),
+      filledText?: string;
+      weekend?: string;
+      normal?: string;
+      disabled?: string;
+    }
+    borderRadius?: string;
+    height?: any;
+  }
 }
 
 const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
@@ -46,12 +69,14 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     setValue: setDate,
     minDate,
     maxDate,
-    locale
+    locale,
+    MonthHeaderProps,
+    DayProps
   } = props;
 
   const weekStartsOn = locale?.options?.weekStartsOn || 0;
   const WEEK_DAYS = typeof locale !== 'undefined'
-    ? [...Array(7).keys()].map(d => locale.localize?.day((d+weekStartsOn) % 7, {width: 'short', context: 'standalone'}))
+    ? [...Array(7).keys()].map(d => locale.localize?.day((d + weekStartsOn) % 7, { width: 'short', context: 'standalone' }))
     : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
   const [back, forward] = props.navState;
 
@@ -66,6 +91,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
           onClickPrevious={() => handlers.onMonthNavigate(marker, NavigationAction.Previous)}
           onClickNext={() => handlers.onMonthNavigate(marker, NavigationAction.Next)}
           locale={locale}
+          {...MonthHeaderProps}
         />
 
         <Grid
@@ -105,22 +131,31 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
                 const isEnd = isEndOfRange(dateRange, day);
                 const isRangeOneDay = isRangeSameDay(dateRange);
                 const highlighted = inDateRange(dateRange, day) || helpers.inHoverRange(day);
+                const dow = day.getDay();
+                const isWeekend = dow == 6 || dow === 0;
+                const filled = isStart || isEnd;
+                const isDisabled = !isSameMonth(date, day)
+                  || !isWithinInterval(day, { start: minDate, end: maxDate })
 
                 return (
                   <Day
                     key={format(day, "dd-MM-yyyy")}
-                    filled={isStart || isEnd}
+                    filled={filled}
                     outlined={isToday(day)}
                     highlighted={highlighted && !isRangeOneDay}
-                    disabled={
-                      !isSameMonth(date, day)
-                      || !isWithinInterval(day, { start: minDate, end: maxDate })
-                    }
+                    disabled={isDisabled}
                     startOfRange={isStart && !isRangeOneDay}
                     endOfRange={isEnd && !isRangeOneDay}
                     onClick={() => handlers.onDayClick(day)}
                     onHover={() => handlers.onDayHover(day)}
                     value={getDate(day)}
+                    {...DayProps}
+                    color={{
+                      ...(DayProps?.color ?? {}),
+                      primary: isWeekend
+                        ? DayProps?.color?.weekend
+                        : (!highlighted && !filled ? (isDisabled ? DayProps?.color?.disabled : DayProps?.color?.normal) : undefined)
+                    }}
                   />
                 );
               })}

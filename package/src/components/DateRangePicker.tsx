@@ -7,6 +7,7 @@ import { getValidatedMonths, parseOptionalDate } from '../utils';
 import { getDefaultRanges } from '../defaults';
 import Menu from './Menu';
 import { Marker, MARKERS } from './Markers';
+import { SelectProps, Theme } from '@mui/material';
 
 interface DateRangePickerProps {
   open: boolean;
@@ -17,6 +18,53 @@ interface DateRangePickerProps {
   // eslint-disable-next-line no-unused-vars
   onChange: (dateRange: DateRange) => void;
   locale?: Locale;
+  DefinedRangesProps?: {
+    color?: {
+      // eslint-disable-next-line no-unused-vars
+      activeBg?: string | ((_: Theme) => string);
+      activeText?: string;
+      activeTextHover?: string;
+    };
+    fontWeight?: {
+      active?: string;
+      normal?: string;
+    }
+    allowCustomRangeLabel?: boolean;
+    customRangeLabel?: string;
+  };
+  MenuProps?: {
+    dividerColor?: string;
+    // eslint-disable-next-line no-unused-vars
+    renderValue?: (_?: Date, locale?: Locale) => React.ReactNode;
+    hideRangeArrow?: boolean;
+    hideHeaderDivider?: boolean;
+    hideMonthDivider?: boolean;
+    headerContainerPadding?: string,
+    valueAlign?: any,
+  }
+  MonthHeaderProps?: {
+    containerJustifyContent?: string;
+    containerGap?: any;
+    navWrapPadding?: any;
+    navPadding?: any;
+    // eslint-disable-next-line no-unused-vars
+    renderPrevIcon?: (disabled?: boolean) => React.ReactNode;
+    // eslint-disable-next-line no-unused-vars
+    renderNextIcon?: (disabled?: boolean) => React.ReactNode;
+    selectProps?: SelectProps<number>;
+  };
+  MonthDayProps?: {
+    color?: {
+      // eslint-disable-next-line no-unused-vars
+      filledBg?: string | ((theme: Theme) => string),
+      filledText?: string;
+      weekend?: string;
+      normal?: string;
+      disabled?: string;
+    }
+    borderRadius?: string;
+    height?: any;
+  }
 }
 
 const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
@@ -32,6 +80,10 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     maxDate,
     definedRanges = getDefaultRanges(new Date(), props.locale),
     locale,
+    DefinedRangesProps,
+    MenuProps,
+    MonthHeaderProps,
+    MonthDayProps
   } = props;
 
   const minDateValid = parseOptionalDate(minDate, addYears(today, -10));
@@ -118,10 +170,10 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
 
   // helpers
   const inHoverRange = (day: Date) => (startDate
-      && !endDate
-      && hoverDay
-      && isAfter(hoverDay, startDate)
-      && isWithinInterval(day, { start: startDate, end: hoverDay })) as boolean;
+    && !endDate
+    && hoverDay
+    && isAfter(hoverDay, startDate)
+    && isWithinInterval(day, { start: startDate, end: hoverDay })) as boolean;
 
   const helpers = {
     inHoverRange,
@@ -147,6 +199,10 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
       helpers={helpers}
       handlers={handlers}
       locale={locale}
+      DefinedRangesProps={DefinedRangesProps}
+      MonthHeaderProps={MonthHeaderProps}
+      MonthDayProps={MonthDayProps}
+      {...MenuProps}
     />
   ) : null;
 };
