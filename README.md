@@ -2,10 +2,6 @@
 
 A react date range picker implementation using @mui (v5).
 
-<a href='https://www.npmjs.com/package/mui-daterange-picker'>
-    <img src='https://img.shields.io/npm/v/mui-daterange-picker.svg' alt='Latest npm version'>
-</a>
-
 ## Preview
 
 ![Screenshot](/screenshot.png?raw=true "Screenshot")
@@ -75,9 +71,7 @@ Name | Type                      | Required | Default value | Description
 `closeOnClickOutside` | `boolean`                 | _optional_ | `true` | defines if DateRangePicker will be closed when clicking outside of it
 `wrapperClassName` | `object`                  | _optional_ | `undefined` | defines additional wrapper style classes
 `locale` | `Locale`  (from date-dns) | _optional_ | `undefined` | defines locale to use (from date-fns package)
-
-## Made possible by
-
-<a href="https://github.com/ricard33/mui-daterange-picker/graphs/contributors">
-  <img src="https://contributors-img.web.app/image?repo=ricard33/mui-daterange-picker" />
-</a>
+`DefinedRangesProps`|`object`| _optional_ | | ...
+`MenuProps`|`object`| _optional_ | | ...
+`MonthHeaderProps`|`object`| _optional_ | | ...
+`MonthDayProps`|`object`| _optional_ | | ...
