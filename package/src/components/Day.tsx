@@ -78,7 +78,7 @@ const Day: React.FunctionComponent<DayProps> = ({
       // size="large"
       >
         <Typography
-          classes={`${classes.text}${!disabled && filled && classes.filledText ? ` ${classes.filledText}` : ''}${isWeekend && classes.weekendText ? ` ${classes.weekendText}` : ''}`}
+          className={`${classes.text}${!disabled && filled && classes.filledText ? ` ${classes.filledText}` : ''}${isWeekend && classes.weekendText ? ` ${classes.weekendText}` : ''}`}
           sx={{
             lineHeight: 1.6,
             color: (theme) => !disabled
