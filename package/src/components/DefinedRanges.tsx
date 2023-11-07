@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, Theme } from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 import { isSameDay } from 'date-fns';
 import React from 'react';
 import { DateRange, DefinedRange } from '../types';
@@ -8,16 +8,12 @@ type DefinedRangesProps = {
   setRange: (range: DateRange) => void;
   selectedRange: DateRange;
   ranges: DefinedRange[];
-  color?: {
-    // eslint-disable-next-line no-unused-vars
-    activeBg?: string | ((_: Theme) => string);
-    activeText?: string;
-    activeTextHover?: string;
-  };
-  fontWeight?: {
-    active?: string;
-    normal?: string;
-  }
+  className?: string;
+  classes?: {
+    listItem?: string;
+    listItemActive?: string;
+    listItemTextTypography?: string;
+  },
   allowCustomRangeLabel?: boolean;
   customRangeLabel?: string;
 };
@@ -35,65 +31,69 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
   ranges,
   setRange,
   selectedRange,
-  color = {
-    activeBg: (theme) => theme.palette.primary.dark,
-    activeText: 'primary.contrastText',
-    activeTextHover: 'inherit'
-  },
-  fontWeight = {
-    active: 'bold',
-    normal: 'normal'
+  className,
+  classes = {
+    listItem: '',
+    listItemActive: '',
+    listItemTextTypography: ''
   },
   allowCustomRangeLabel,
   customRangeLabel = ''
 }: DefinedRangesProps) => (
-  <List>
-    {ranges.map((range, idx) => (
-      <ListItem button
-        key={idx}
-        onClick={() => setRange(range)}
-        sx={[
-          isSameRange(range, selectedRange) && {
-            backgroundColor: color.activeBg || ((theme) => theme.palette.primary.dark),
-            color: color.activeText || 'primary.contrastText',
-            '&:hover': {
-              color: color.activeTextHover || 'inherit'
-            }
-          }]}
-      >
-        <ListItemText
-          primaryTypographyProps={{
-            variant: 'body2',
-            sx: {
-              fontWeight: isSameRange(range, selectedRange)
-                ? (fontWeight.active || 'bold')
-                : (fontWeight.normal || 'normal'),
-            },
-          }}
+  <List className={className}>
+    {ranges.map((range, idx) => {
+      const _isSameRange = isSameRange(range, selectedRange);
+      return (
+        <ListItem button
+          key={idx}
+          onClick={() => setRange(range)}
+          className={`${classes.listItem}${_isSameRange && classes.listItemActive ? ` ${classes.listItemActive}` : ''}`}
+          sx={[
+            _isSameRange && {
+              backgroundColor: (theme) => theme.palette.primary.dark,
+              color: 'primary.contrastText',
+              '&:hover': {
+                color: 'inherit'
+              }
+            }]}
         >
-          {range.label}
-        </ListItemText>
-      </ListItem>
-    ))}
+          <ListItemText
+            primaryTypographyProps={{
+              className: classes.listItemTextTypography,
+              variant: 'body2',
+              sx: {
+                fontWeight: _isSameRange
+                  ? 'bold'
+                  : 'normal',
+              },
+            }}
+          >
+            {range.label}
+          </ListItemText>
+        </ListItem>
+      )
+    })}
     {allowCustomRangeLabel && <>
       <ListItem button
         onClick={(e) => { e.preventDefault(); }}
+        className={`${classes.listItem}${ranges.every((range) => !isSameRange(range, selectedRange)) && classes.listItemActive ? ` ${classes.listItemActive}` : ''}`}
         sx={[
           ranges.every((range) => !isSameRange(range, selectedRange)) && {
-            backgroundColor: color.activeBg || ((theme) => theme.palette.primary.dark),
-            color: color.activeText || 'primary.contrastText',
+            backgroundColor: (theme) => theme.palette.primary.dark,
+            color: 'primary.contrastText',
             '&:hover': {
-              color: color.activeTextHover || 'inherit'
+              color: 'inherit'
             }
           }
         ]}
       >
         <ListItemText primaryTypographyProps={{
+          className: classes.listItemTextTypography,
           variant: "body2",
           sx: {
             fontWeight: ranges.every((range) => !isSameRange(range, selectedRange))
-              ? (fontWeight.active || 'bold')
-              : (fontWeight.normal || 'normal'),
+              ? 'bold'
+              : 'normal',
           }
         }}>
           {customRangeLabel}

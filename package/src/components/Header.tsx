@@ -13,10 +13,11 @@ interface HeaderProps {
   onClickNext: () => void;
   onClickPrevious: () => void;
   locale?: Locale;
-  containerJustifyContent?: string;
-  containerGap?: any;
-  navWrapPadding?: any;
-  navPadding?: any;
+  classes?: {
+    root?: string;
+    navWrap?: string;
+    nav?: string;
+  };
   // eslint-disable-next-line no-unused-vars
   renderPrevIcon?: (disabled?: boolean) => ReactNode;
   // eslint-disable-next-line no-unused-vars
@@ -39,13 +40,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   onClickNext,
   onClickPrevious,
   locale,
-  containerJustifyContent,
-  containerGap,
-  navWrapPadding,
-  navPadding,
   renderPrevIcon,
   renderNextIcon,
-  selectProps
+  selectProps,
+  classes = {
+    root: '',
+    navWrap: '',
+    nav: ''
+  }
 }: HeaderProps) => {
   const MONTHS = typeof locale !== 'undefined'
     ? [...Array(12).keys()].map(d => locale.localize?.month(d, { width: 'abbreviated', context: 'standalone' }))
@@ -60,11 +62,12 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   };
 
   return (
-    <Grid container justifyContent={containerJustifyContent || "space-between"} alignItems="center" gap={containerGap}>
-      <Grid item sx={{ padding: navWrapPadding || '5px' }}>
+    <Grid container className={classes.root} justifyContent="space-between" alignItems="center">
+      <Grid item className={classes.navWrap} sx={{ padding: '5px' }}>
         <IconButton
+          className={classes.nav}
           sx={{
-            padding: navPadding || '10px',
+            padding: '10px',
             '&:hover': {
               background: 'none',
             },
@@ -111,10 +114,11 @@ const Header: React.FunctionComponent<HeaderProps> = ({
 
         {/* <Typography>{format(date, "MMMM YYYY")}</Typography> */}
       </Grid>
-      <Grid item sx={{ padding: navWrapPadding || '5px' }}>
+      <Grid item className={classes.navWrap} sx={{ padding: '5px' }}>
         <IconButton
+          className={classes.nav}
           sx={{
-            padding: navPadding || '10px',
+            padding: '10px',
             '&:hover': {
               background: 'none',
             },

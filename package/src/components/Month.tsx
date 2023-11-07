@@ -1,15 +1,21 @@
-import React, { ReactNode } from "react";
-import { Paper, Grid, Typography, SelectProps, Theme } from "@mui/material";
+import { Grid, Paper, SelectProps, Typography } from "@mui/material";
 import {
-  getDate, isSameMonth, isToday, format, isWithinInterval
+  format,
+  getDate, isSameMonth, isToday,
+  isWithinInterval
 } from "date-fns";
+import React, { ReactNode } from "react";
 import {
-  chunks, getDaysInMonth, isStartOfRange, isEndOfRange, inDateRange, isRangeSameDay
+  chunks, getDaysInMonth,
+  inDateRange,
+  isEndOfRange,
+  isRangeSameDay,
+  isStartOfRange
 } from "../utils";
-import Header from "./Header";
 import Day from "./Day";
+import Header from "./Header";
 
-import { NavigationAction, DateRange } from "../types";
+import { DateRange, NavigationAction } from "../types";
 
 
 interface MonthProps {
@@ -35,25 +41,30 @@ interface MonthProps {
   };
   locale?: Locale;
   MonthHeaderProps?: {
-    containerJustifyContent?: string;
-    containerGap?: any;
-    navWrapPadding?: any;
-    navPadding?: any;
+    classes?: {
+      root?: string;
+      navWrap?: string;
+      nav?: string;
+    };
     // eslint-disable-next-line no-unused-vars
     renderPrevIcon?: (disabled?: boolean) => ReactNode;
     // eslint-disable-next-line no-unused-vars
     renderNextIcon?: (disabled?: boolean) => ReactNode;
     selectProps?: SelectProps<number>;
-  }
+  };
+  classes?: {
+    weekday?: string;
+    weekend?: string;
+  };
   DayProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      filledBg?: string | ((theme: Theme) => string),
+    classes?: {
+      root?: string;
+      highlighted?: string;
+      btnFilled?: string;
+      text?: string;
+      weekendText?: string;
       filledText?: string;
-      weekend?: string;
-      normal?: string;
-      disabled?: string;
-    }
+    };
     borderRadius?: string;
     height?: any;
   }
@@ -71,6 +82,10 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     maxDate,
     locale,
     MonthHeaderProps,
+    classes = {
+      weekday: '',
+      weekend: ''
+    },
     DayProps
   } = props;
 
@@ -105,11 +120,16 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
             paddingRight: "30px"
           }}
         >
-          {WEEK_DAYS.map((day, index) => (
-            <Typography color="textSecondary" key={index} variant="caption">
-              {day}
-            </Typography>
-          ))}
+          {WEEK_DAYS.map((day, index) => {
+            const isWeekend = index >= 5;
+            return (
+              <Typography
+                className={`${classes.weekday}${isWeekend && classes.weekend ? ` ${classes.weekend}` : ''}`}
+                color="textSecondary" key={index} variant="caption">
+                {day}
+              </Typography>
+            )
+          })}
         </Grid>
 
         <Grid
@@ -149,13 +169,8 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
                     onClick={() => handlers.onDayClick(day)}
                     onHover={() => handlers.onDayHover(day)}
                     value={getDate(day)}
+                    isWeekend={isWeekend}
                     {...DayProps}
-                    color={{
-                      ...(DayProps?.color ?? {}),
-                      primary: isWeekend
-                        ? DayProps?.color?.weekend
-                        : (!highlighted && !filled ? (isDisabled ? DayProps?.color?.disabled : DayProps?.color?.normal) : undefined)
-                    }}
                   />
                 );
               })}

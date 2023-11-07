@@ -1,13 +1,13 @@
-import * as React from 'react';
+import { SelectProps } from '@mui/material';
 import {
   addMonths, addYears, isAfter, isBefore, isSameDay, isSameMonth, isWithinInterval, max, min,
 } from 'date-fns';
+import * as React from 'react';
+import { getDefaultRanges } from '../defaults';
 import { DateRange, DefinedRange, NavigationAction } from '../types';
 import { getValidatedMonths, parseOptionalDate } from '../utils';
-import { getDefaultRanges } from '../defaults';
+import { MARKERS, Marker } from './Markers';
 import Menu from './Menu';
-import { Marker, MARKERS } from './Markers';
-import { SelectProps, Theme } from '@mui/material';
 
 interface DateRangePickerProps {
   open: boolean;
@@ -19,34 +19,39 @@ interface DateRangePickerProps {
   onChange: (dateRange: DateRange) => void;
   locale?: Locale;
   DefinedRangesProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      activeBg?: string | ((_: Theme) => string);
-      activeText?: string;
-      activeTextHover?: string;
-    };
-    fontWeight?: {
-      active?: string;
-      normal?: string;
-    }
+    className?: string;
+    classes?: {
+      listItem?: string;
+      listItemActive?: string;
+      listItemTextTypography?: string;
+    },
     allowCustomRangeLabel?: boolean;
     customRangeLabel?: string;
   };
   MenuProps?: {
-    dividerColor?: string;
+    classes?: {
+      rangesMenuDivider?: string;
+      valueContainer?: string;
+      valueItem?: string;
+    };
     // eslint-disable-next-line no-unused-vars
     renderValue?: (_?: Date, locale?: Locale) => React.ReactNode;
     hideRangeArrow?: boolean;
     hideHeaderDivider?: boolean;
     hideMonthDivider?: boolean;
-    headerContainerPadding?: string,
-    valueAlign?: any,
   }
+  MonthProps?: {
+    classes?: {
+      weekday?: string;
+      weekend?: string;
+    };
+  };
   MonthHeaderProps?: {
-    containerJustifyContent?: string;
-    containerGap?: any;
-    navWrapPadding?: any;
-    navPadding?: any;
+    classes?: {
+      root?: string;
+      navWrap?: string;
+      nav?: string;
+    };
     // eslint-disable-next-line no-unused-vars
     renderPrevIcon?: (disabled?: boolean) => React.ReactNode;
     // eslint-disable-next-line no-unused-vars
@@ -54,14 +59,14 @@ interface DateRangePickerProps {
     selectProps?: SelectProps<number>;
   };
   MonthDayProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      filledBg?: string | ((theme: Theme) => string),
+    classes?: {
+      root?: string;
+      highlighted?: string;
+      btnFilled?: string;
+      text?: string;
+      weekendText?: string;
       filledText?: string;
-      weekend?: string;
-      normal?: string;
-      disabled?: string;
-    }
+    };
     borderRadius?: string;
     height?: any;
   }
@@ -82,6 +87,7 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     locale,
     DefinedRangesProps,
     MenuProps,
+    MonthProps,
     MonthHeaderProps,
     MonthDayProps
   } = props;
@@ -200,6 +206,7 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
       handlers={handlers}
       locale={locale}
       DefinedRangesProps={DefinedRangesProps}
+      MonthProps={MonthProps}
       MonthHeaderProps={MonthHeaderProps}
       MonthDayProps={MonthDayProps}
       {...MenuProps}

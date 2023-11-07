@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Box, SelectProps, Theme } from '@mui/material';
+import { Box, SelectProps } from '@mui/material';
 import DateRangePicker from './DateRangePicker';
 
 // eslint-disable-next-line no-unused-vars
@@ -19,34 +19,39 @@ export interface DateRangePickerWrapperProps {
   wrapperClassName?: string;
   locale?: Locale;
   DefinedRangesProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      activeBg?: string | ((_: Theme) => string);
-      activeText?: string;
-      activeTextHover?: string;
-    };
-    fontWeight?: {
-      active?: string;
-      normal?: string;
-    }
+    className?: string;
+    classes?: {
+      listItem?: string;
+      listItemActive?: string;
+      listItemTextTypography?: string;
+    },
     allowCustomRangeLabel?: boolean;
     customRangeLabel?: string;
   };
   MenuProps?: {
-    dividerColor?: string;
+    classes?: {
+      rangesMenuDivider?: string;
+      valueContainer?: string;
+      valueItem?: string;
+    };
     // eslint-disable-next-line no-unused-vars
-    renderValue?: (_?: Date, locale?: Locale) => ReactNode;
+    renderValue?: (_?: Date, locale?: Locale) => React.ReactNode;
     hideRangeArrow?: boolean;
     hideHeaderDivider?: boolean;
     hideMonthDivider?: boolean;
-    headerContainerPadding?: string,
-    valueAlign?: any,
-  }
+  };
+  MonthProps?: {
+    classes?: {
+      weekday?: string;
+      weekend?: string;
+    };
+  };
   MonthHeaderProps?: {
-    containerJustifyContent?: string;
-    containerGap?: any;
-    navWrapPadding?: any;
-    navPadding?: any;
+    classes?: {
+      root?: string;
+      navWrap?: string;
+      nav?: string;
+    };
     // eslint-disable-next-line no-unused-vars
     renderPrevIcon?: (disabled?: boolean) => ReactNode;
     // eslint-disable-next-line no-unused-vars
@@ -54,17 +59,17 @@ export interface DateRangePickerWrapperProps {
     selectProps?: SelectProps<number>;
   };
   MonthDayProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      filledBg?: string | ((theme: Theme) => string),
+    classes?: {
+      root?: string;
+      highlighted?: string;
+      btnFilled?: string;
+      text?: string;
+      weekendText?: string;
       filledText?: string;
-      weekend?: string;
-      normal?: string;
-      disabled?: string;
-    }
+    };
     borderRadius?: string;
     height?: any;
-  }
+  };
 }
 
 const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (

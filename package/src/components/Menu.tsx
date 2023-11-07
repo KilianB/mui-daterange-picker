@@ -1,17 +1,17 @@
 /* eslint-disable object-curly-newline */
-import React, { ReactNode } from 'react';
-import { Divider, Grid, Paper, SelectProps, Theme, Typography } from '@mui/material';
-import { differenceInCalendarMonths, format } from 'date-fns';
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
-import Month from './Month';
-import DefinedRanges from './DefinedRanges';
+import { Divider, Grid, Paper, SelectProps, Typography } from '@mui/material';
+import { differenceInCalendarMonths, format } from 'date-fns';
+import React, { ReactNode } from 'react';
 import {
   DateRange,
   DefinedRange,
-  Setter,
   NavigationAction,
+  Setter,
 } from '../types';
+import DefinedRanges from './DefinedRanges';
 import { MARKERS } from './Markers';
+import Month from './Month';
 
 interface MenuProps {
   dateRange: DateRange;
@@ -37,47 +37,52 @@ interface MenuProps {
   };
   locale?: Locale;
   DefinedRangesProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      activeBg?: string | ((_: Theme) => string);
-      activeText?: string;
-      activeTextHover?: string;
-    };
-    fontWeight?: {
-      active?: string;
-      normal?: string;
-    }
+    classes?: {
+      listItem?: string;
+      listItemActive?: string;
+      listItemTextTypography?: string;
+    },
     allowCustomRangeLabel?: boolean;
     customRangeLabel?: string;
   }
-  dividerColor?: string;
+  className?: string;
+  classes?: {
+    rangesMenuDivider?: string;
+    valueContainer?: string;
+    valueItem?: string;
+  };
   // eslint-disable-next-line no-unused-vars
   renderValue?: (_?: Date, locale?: Locale) => ReactNode;
   hideRangeArrow?: boolean;
   hideHeaderDivider?: boolean;
   hideMonthDivider?: boolean;
-  headerContainerPadding?: string;
-  valueAlign?: any;
+  MonthProps?: {
+    classes?: {
+      weekday?: string;
+      weekend?: string;
+    };
+  };
   MonthHeaderProps?: {
-    containerJustifyContent?: string;
-    containerGap?: any;
-    navWrapPadding?: any;
-    navPadding?: any;
+    classes?: {
+      root?: string;
+      navWrap?: string;
+      nav?: string;
+    };
     // eslint-disable-next-line no-unused-vars
     renderPrevIcon?: (disabled?: boolean) => ReactNode;
     // eslint-disable-next-line no-unused-vars
     renderNextIcon?: (disabled?: boolean) => ReactNode;
     selectProps?: SelectProps<number>;
-  },
+  };
   MonthDayProps?: {
-    color?: {
-      // eslint-disable-next-line no-unused-vars
-      filledBg?: string | ((theme: Theme) => string),
+    classes?: {
+      root?: string;
+      highlighted?: string;
+      btnFilled?: string;
+      text?: string;
+      weekendText?: string;
       filledText?: string;
-      weekend?: string;
-      normal?: string;
-      disabled?: string;
-    }
+    };
     borderRadius?: string;
     height?: any;
   }
@@ -98,26 +103,31 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
     handlers,
     locale,
     DefinedRangesProps,
-    dividerColor,
     renderValue,
     hideRangeArrow,
     hideHeaderDivider,
     hideMonthDivider,
-    headerContainerPadding,
-    valueAlign,
+    MonthProps,
     MonthHeaderProps,
-    MonthDayProps
+    MonthDayProps,
+    className,
+    classes = {
+      rangesMenuDivider: '',
+      valueContainer: '',
+      valueItem: ''
+    }
   } = props;
 
   const { startDate, endDate } = dateRange;
   const canNavigateCloser = differenceInCalendarMonths(secondMonth, firstMonth) >= 2;
   const commonProps = {
     dateRange, minDate, maxDate, helpers, handlers,
+    MonthProps,
     MonthHeaderProps,
     DayProps: MonthDayProps
   };
   return (
-    <Paper elevation={5} square>
+    <Paper elevation={5} square className={className}>
       <Grid container direction="row" wrap="nowrap">
         <Grid>
           <DefinedRanges
@@ -127,10 +137,10 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
             {...DefinedRangesProps}
           />
         </Grid>
-        <Divider orientation="vertical" flexItem sx={{ borderColor: dividerColor }} />
+        <Divider orientation="vertical" flexItem className={classes.rangesMenuDivider} />
         <Grid>
-          <Grid container sx={{ padding: headerContainerPadding || '20px 70px' }} alignItems="center">
-            <Grid item sx={{ flex: 1, textAlign: valueAlign || 'center' }}>
+          <Grid container className={classes.valueContainer} sx={{ padding: '20px 70px' }} alignItems="center">
+            <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
               {renderValue
                 ? renderValue(startDate, locale)
                 : <Typography variant="subtitle1">
@@ -138,10 +148,10 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
                 </Typography>}
 
             </Grid>
-            {!hideRangeArrow && <Grid item sx={{ flex: 1, textAlign: valueAlign || 'center' }}>
+            {!hideRangeArrow && <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
               <ArrowRightAlt color="action" />
             </Grid>}
-            <Grid item sx={{ flex: 1, textAlign: valueAlign || 'center' }}>
+            <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
               {renderValue
                 ? renderValue(endDate, locale)
                 : <Typography variant="subtitle1">
