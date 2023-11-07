@@ -13,16 +13,16 @@ Check out the project running [here](https://codesandbox.io/s/mui-daterange-pick
 ## Usage
 
 ```bash
-npm install mui-daterange-picker --save
+npm install @ks-erp/mui-daterange-picker --save
 
 # or with yarn
-yarn add mui-daterange-picker
+yarn add @ks-erp/mui-daterange-picker
 ```
 
 ## Basic example
 ```tsx
 import React from "react";
-import { DateRangePicker, DateRange } from "mui-daterange-picker";
+import { DateRangePicker, DateRange } from "@ks-erp/mui-daterange-picker";
 
 type Props = {}
 
@@ -73,5 +73,6 @@ Name | Type                      | Required | Default value | Description
 `locale` | `Locale`  (from date-dns) | _optional_ | `undefined` | defines locale to use (from date-fns package)
 `DefinedRangesProps`|`object`| _optional_ | | ...
 `MenuProps`|`object`| _optional_ | | ...
+`MonthProps` | `object` | _optional_ | | ...
 `MonthHeaderProps`|`object`| _optional_ | | ...
 `MonthDayProps`|`object`| _optional_ | | ...
