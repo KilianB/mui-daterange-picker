@@ -1,6 +1,6 @@
 {
     "name": "@ks-erp/mui-daterange-picker",
-    "version": "1.0.2",
+    "version": "1.0.0",
     "description": "A react date range picker implementation using @mui.",
     "author": "ricard33",
     "license": "MIT",
