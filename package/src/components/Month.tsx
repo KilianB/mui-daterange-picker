@@ -53,6 +53,7 @@ interface MonthProps {
     selectProps?: SelectProps<number>;
   };
   classes?: {
+    dayInMonthGrid?: string;
     weekday?: string;
     weekend?: string;
   };
@@ -83,6 +84,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     locale,
     MonthHeaderProps,
     classes = {
+      dayInMonthGrid: '',
       weekday: '',
       weekend: ''
     },
@@ -137,6 +139,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
           container
           direction="column"
           justifyContent="space-between"
+          className={classes.dayInMonthGrid}
           sx={{
             paddingLeft: '15px',
             paddingRight: '15px',

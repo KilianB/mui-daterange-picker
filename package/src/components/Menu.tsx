@@ -52,12 +52,13 @@ interface MenuProps {
     valueItem?: string;
   };
   // eslint-disable-next-line no-unused-vars
-  renderValue?: (_?: Date, locale?: Locale) => ReactNode;
+  renderValue?: (valueType: "start" | "end", _?: Date, locale?: Locale) => ReactNode;
   hideRangeArrow?: boolean;
   hideHeaderDivider?: boolean;
   hideMonthDivider?: boolean;
   MonthProps?: {
     classes?: {
+      dayInMonthGrid?: string;
       weekday?: string;
       weekend?: string;
     };
@@ -142,7 +143,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
           <Grid container className={classes.valueContainer} sx={{ padding: '20px 70px' }} alignItems="center">
             <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
               {renderValue
-                ? renderValue(startDate, locale)
+                ? renderValue("start", startDate, locale)
                 : <Typography variant="subtitle1">
                   {startDate ? format(startDate, 'dd MMMM yyyy', { locale }) : 'Start Date'}
                 </Typography>}
@@ -153,7 +154,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
             </Grid>}
             <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
               {renderValue
-                ? renderValue(endDate, locale)
+                ? renderValue("end", endDate, locale)
                 : <Typography variant="subtitle1">
                   {endDate ? format(endDate, 'dd MMMM yyyy', { locale }) : 'End Date'}
                 </Typography>}

@@ -76,3 +76,78 @@ Name | Type                      | Required | Default value | Description
 `MonthProps` | `object` | _optional_ | | ...
 `MonthHeaderProps`|`object`| _optional_ | | ...
 `MonthDayProps`|`object`| _optional_ | | ...
+
+### `DefinedRangesProps`
+
+```ts
+type DefinedRangesProps = {
+  className?: string; // Class applied to Root Defined Ranges Element
+  classes?: {
+    listItem?: string; // Class applied to Defined Ranges List
+    listItemActive?: string; // Class applied to Matched Defined Ranges
+    listItemTextTypography?: string; // Class applied to Defined Range Label
+  },
+  allowCustomRangeLabel?: boolean; // Allow non-match range label
+  customRangeLabel?: string; // non-match label
+}
+```
+
+### `MenuProps`
+
+```ts
+type MenuProps = {
+  classes?: {
+    rangesMenuDivider?: string; // Class applied to divider between Defined Ranges and Picker
+    valueContainer?: string; // Class applied to picker value container
+    valueItem?: string; // Class applied to picker value item
+  };
+  renderValue?: (valueType: "start" | "end", _?: Date, locale?: Locale) => React.ReactNode; // Function to render value
+  hideRangeArrow?: boolean;
+  hideHeaderDivider?: boolean;
+  hideMonthDivider?: boolean;
+}
+```
+
+### `MonthProps`
+
+```ts
+type MonthProps = {
+  classes?: {
+    dayInMonthGrid?: string;
+    weekday?: string;
+    weekend?: string;
+  };
+};
+```
+
+### `MonthHeaderProps`
+
+```ts
+type MonthHeaderProps = {
+  classes?: {
+    root?: string; // Class applied to Month Picker Container
+    navWrap?: string; // Class applied to navigation wrap
+    nav?: string; // Class applied to navigation
+  };
+  renderPrevIcon?: (disabled?: boolean) => React.ReactNode; // Render Function applied to Previous Month Navigation Icon
+  renderNextIcon?: (disabled?: boolean) => React.ReactNode; // Render Function applied to Next Month Navigation Icon
+  selectProps?: SelectProps<number>; // MUI Select Props, applied to Month/Year Select Element
+}
+```
+
+### `MonthDayProps`
+
+```ts
+type MonthDayProps = {
+  classes?: {
+    root?: string; // Class applied to Day box button
+    highlighted?: string; // Class applied to highlighted days (days in range)
+    btnFilled?: string; // Class applied to Start/End range day button
+    text?: string; // Class applied to Day text
+    weekendText?: string; // Class applied to Weekend day text
+    filledText?: string; // Class applied to Start/End Range text
+  };
+  borderRadius?: string; // Radius of Day button
+  height?: any; // In px or number, heigh of Day button
+}
+```

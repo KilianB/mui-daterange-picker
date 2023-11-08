@@ -35,13 +35,14 @@ export interface DateRangePickerWrapperProps {
       valueItem?: string;
     };
     // eslint-disable-next-line no-unused-vars
-    renderValue?: (_?: Date, locale?: Locale) => React.ReactNode;
+    renderValue?: (valueType: "start" | "end", _?: Date, locale?: Locale) => ReactNode;
     hideRangeArrow?: boolean;
     hideHeaderDivider?: boolean;
     hideMonthDivider?: boolean;
   };
   MonthProps?: {
     classes?: {
+      dayInMonthGrid?: string;
       weekday?: string;
       weekend?: string;
     };
