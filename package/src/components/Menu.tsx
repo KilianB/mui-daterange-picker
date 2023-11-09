@@ -6,6 +6,7 @@ import React, { ReactNode } from 'react';
 import {
   DateRange,
   DefinedRange,
+  FixedLengthArray,
   NavigationAction,
   Setter,
 } from '../types';
@@ -57,6 +58,8 @@ interface MenuProps {
   hideHeaderDivider?: boolean;
   hideMonthDivider?: boolean;
   MonthProps?: {
+    weekdaysDisplayLocale?: Locale;
+    weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"];
     classes?: {
       dayInMonthGrid?: string;
       weekday?: string;
@@ -64,6 +67,7 @@ interface MenuProps {
     };
   };
   MonthHeaderProps?: {
+    customMonthLabels?: FixedLengthArray<string, 12>;
     classes?: {
       root?: string;
       navWrap?: string;

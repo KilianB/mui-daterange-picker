@@ -15,6 +15,7 @@ interface DayProps {
   classes?: {
     root?: string;
     highlighted?: string;
+    btnOutlined?: string;
     btnFilled?: string;
     text?: string;
     weekendText?: string;
@@ -38,6 +39,7 @@ const Day: React.FunctionComponent<DayProps> = ({
   classes = {
     root: '',
     highlighted: '',
+    btnOutlined: '',
     btnFilled: '',
     text: '',
     weekendText: '',
@@ -58,7 +60,7 @@ const Day: React.FunctionComponent<DayProps> = ({
       }}
     >
       <IconButton
-        className={!disabled && filled && classes.btnFilled ? classes.btnFilled : undefined}
+        className={!disabled ? `${filled && classes.btnFilled ? classes.btnFilled : ''} ${outlined && classes.btnOutlined ? classes.btnOutlined : ''}` : undefined}
         sx={{
           height: height || '36px',
           width: '36px',

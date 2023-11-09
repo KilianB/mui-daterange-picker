@@ -4,7 +4,7 @@ import {
 } from 'date-fns';
 import * as React from 'react';
 import { getDefaultRanges } from '../defaults';
-import { DateRange, DefinedRange, NavigationAction } from '../types';
+import { DateRange, DefinedRange, FixedLengthArray, NavigationAction } from '../types';
 import { getValidatedMonths, parseOptionalDate } from '../utils';
 import { MARKERS, Marker } from './Markers';
 import Menu from './Menu';
@@ -41,6 +41,8 @@ interface DateRangePickerProps {
     hideMonthDivider?: boolean;
   }
   MonthProps?: {
+    weekdaysDisplayLocale?: Locale;
+    weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"];
     classes?: {
       dayInMonthGrid?: string;
       weekday?: string;
@@ -48,6 +50,7 @@ interface DateRangePickerProps {
     };
   };
   MonthHeaderProps?: {
+    customMonthLabels?: FixedLengthArray<string, 12>;
     classes?: {
       root?: string;
       navWrap?: string;

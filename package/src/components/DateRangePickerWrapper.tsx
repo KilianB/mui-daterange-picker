@@ -4,7 +4,7 @@ import { Box, SelectProps } from '@mui/material';
 import DateRangePicker from './DateRangePicker';
 
 // eslint-disable-next-line no-unused-vars
-import { DateRange, DefinedRange } from '../types';
+import { DateRange, DefinedRange, FixedLengthArray } from '../types';
 
 export interface DateRangePickerWrapperProps {
   open: boolean;
@@ -41,6 +41,8 @@ export interface DateRangePickerWrapperProps {
     hideMonthDivider?: boolean;
   };
   MonthProps?: {
+    weekdaysDisplayLocale?: Locale;
+    weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"];
     classes?: {
       dayInMonthGrid?: string;
       weekday?: string;
@@ -48,6 +50,7 @@ export interface DateRangePickerWrapperProps {
     };
   };
   MonthHeaderProps?: {
+    customMonthLabels?: FixedLengthArray<string, 12>;
     classes?: {
       root?: string;
       navWrap?: string;

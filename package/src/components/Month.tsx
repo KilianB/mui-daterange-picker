@@ -15,7 +15,7 @@ import {
 import Day from "./Day";
 import Header from "./Header";
 
-import { DateRange, NavigationAction } from "../types";
+import { DateRange, FixedLengthArray, NavigationAction } from "../types";
 
 
 interface MonthProps {
@@ -41,6 +41,7 @@ interface MonthProps {
   };
   locale?: Locale;
   MonthHeaderProps?: {
+    customMonthLabels?: FixedLengthArray<string, 12>;
     classes?: {
       root?: string;
       navWrap?: string;
@@ -57,6 +58,8 @@ interface MonthProps {
     weekday?: string;
     weekend?: string;
   };
+  weekdaysDisplayLocale?: Locale;
+  weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"]
   DayProps?: {
     classes?: {
       root?: string;
@@ -82,6 +85,8 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     minDate,
     maxDate,
     locale,
+    weekdaysDisplayLocale,
+    weekStartOn: _weekStartOn,
     MonthHeaderProps,
     classes = {
       dayInMonthGrid: '',
@@ -91,10 +96,12 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     DayProps
   } = props;
 
-  const weekStartsOn = locale?.options?.weekStartsOn || 0;
-  const WEEK_DAYS = typeof locale !== 'undefined'
-    ? [...Array(7).keys()].map(d => locale.localize?.day((d + weekStartsOn) % 7, { width: 'short', context: 'standalone' }))
-    : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const weekStartsOn = typeof _weekStartOn !== "undefined" ? _weekStartOn : (locale?.options?.weekStartsOn || 0);
+  const WEEK_DAYS = typeof weekdaysDisplayLocale !== "undefined"
+    ? [...Array(7).keys()].map(d => weekdaysDisplayLocale.localize?.day((d + weekStartsOn) % 7, { width: 'short', context: 'standalone' }))
+    : (typeof locale !== 'undefined'
+      ? [...Array(7).keys()].map(d => locale.localize?.day((d + weekStartsOn) % 7, { width: 'short', context: 'standalone' }))
+      : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]);
   const [back, forward] = props.navState;
 
   return (

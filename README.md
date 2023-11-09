@@ -112,6 +112,8 @@ type MenuProps = {
 
 ```ts
 type MonthProps = {
+  weekdaysDisplayLocale?: Locale;
+  weekStartOn?: number; // 0 | 1 | 2 | 3 | 4 | 5 | 6
   classes?: {
     dayInMonthGrid?: string;
     weekday?: string;
@@ -124,6 +126,7 @@ type MonthProps = {
 
 ```ts
 type MonthHeaderProps = {
+  customMonthLabels?: string[];
   classes?: {
     root?: string; // Class applied to Month Picker Container
     navWrap?: string; // Class applied to navigation wrap
