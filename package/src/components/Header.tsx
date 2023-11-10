@@ -1,9 +1,8 @@
-import { FormControl, Grid, IconButton, MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
-import React, { ReactNode } from 'react';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
+import { FormControl, Grid, IconButton, MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
 import { getMonth, getYear, setMonth, setYear } from 'date-fns';
-import { FixedLengthArray } from '../types';
+import React, { ReactNode } from 'react';
 
 interface HeaderProps {
   date: Date;
@@ -14,7 +13,7 @@ interface HeaderProps {
   onClickNext: () => void;
   onClickPrevious: () => void;
   locale?: Locale;
-  customMonthLabels?: FixedLengthArray<string, 12>;
+  customMonthLabels?: string[];
   classes?: {
     root?: string;
     navWrap?: string;

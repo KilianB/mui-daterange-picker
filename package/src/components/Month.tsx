@@ -15,7 +15,7 @@ import {
 import Day from "./Day";
 import Header from "./Header";
 
-import { DateRange, FixedLengthArray, NavigationAction } from "../types";
+import { DateRange, NavigationAction } from "../types";
 
 
 interface MonthProps {
@@ -41,7 +41,7 @@ interface MonthProps {
   };
   locale?: Locale;
   MonthHeaderProps?: {
-    customMonthLabels?: FixedLengthArray<string, 12>;
+    customMonthLabels?: string[];
     classes?: {
       root?: string;
       navWrap?: string;

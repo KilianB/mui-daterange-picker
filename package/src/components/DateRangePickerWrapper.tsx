@@ -4,7 +4,7 @@ import { Box, SelectProps } from '@mui/material';
 import DateRangePicker from './DateRangePicker';
 
 // eslint-disable-next-line no-unused-vars
-import { DateRange, DefinedRange, FixedLengthArray } from '../types';
+import { DateRange, DefinedRange } from '../types';
 
 export interface DateRangePickerWrapperProps {
   open: boolean;
@@ -50,7 +50,7 @@ export interface DateRangePickerWrapperProps {
     };
   };
   MonthHeaderProps?: {
-    customMonthLabels?: FixedLengthArray<string, 12>;
+    customMonthLabels?: string[];
     classes?: {
       root?: string;
       navWrap?: string;

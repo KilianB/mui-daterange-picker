@@ -6,9 +6,8 @@ import React, { ReactNode } from 'react';
 import {
   DateRange,
   DefinedRange,
-  FixedLengthArray,
   NavigationAction,
-  Setter,
+  Setter
 } from '../types';
 import DefinedRanges from './DefinedRanges';
 import { MARKERS } from './Markers';
@@ -67,7 +66,7 @@ interface MenuProps {
     };
   };
   MonthHeaderProps?: {
-    customMonthLabels?: FixedLengthArray<string, 12>;
+    customMonthLabels?: string[];
     classes?: {
       root?: string;
       navWrap?: string;

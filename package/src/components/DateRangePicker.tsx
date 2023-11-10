@@ -4,7 +4,7 @@ import {
 } from 'date-fns';
 import * as React from 'react';
 import { getDefaultRanges } from '../defaults';
-import { DateRange, DefinedRange, FixedLengthArray, NavigationAction } from '../types';
+import { DateRange, DefinedRange, NavigationAction } from '../types';
 import { getValidatedMonths, parseOptionalDate } from '../utils';
 import { MARKERS, Marker } from './Markers';
 import Menu from './Menu';
@@ -50,7 +50,7 @@ interface DateRangePickerProps {
     };
   };
   MonthHeaderProps?: {
-    customMonthLabels?: FixedLengthArray<string, 12>;
+    customMonthLabels?: string[];
     classes?: {
       root?: string;
       navWrap?: string;
