@@ -1,4 +1,5 @@
-import { List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemText, Theme } from '@mui/material';
+import { SxProps } from "@mui/system";
 import { isSameDay } from 'date-fns';
 import React from 'react';
 import { DateRange, DefinedRange } from '../types';
@@ -43,19 +44,19 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
   <List className={className}>
     {ranges.map((range, idx) => {
       const _isSameRange = isSameRange(range, selectedRange);
+      const sx: SxProps<Theme> = _isSameRange ? {
+        backgroundColor: (theme) => theme.palette.primary.dark,
+        color: 'primary.contrastText',
+        '&:hover': {
+          color: 'inherit'
+        }
+      } : {}
       return (
         <ListItem button
           key={idx}
           onClick={() => setRange(range)}
           className={`${classes.listItem}${_isSameRange && classes.listItemActive ? ` ${classes.listItemActive}` : ''}`}
-          sx={[
-            _isSameRange && {
-              backgroundColor: (theme) => theme.palette.primary.dark,
-              color: 'primary.contrastText',
-              '&:hover': {
-                color: 'inherit'
-              }
-            }]}
+          sx={sx}
         >
           <ListItemText
             primaryTypographyProps={{
@@ -77,15 +78,15 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
       <ListItem button
         onClick={(e) => { e.preventDefault(); }}
         className={`${classes.listItem}${ranges.every((range) => !isSameRange(range, selectedRange)) && classes.listItemActive ? ` ${classes.listItemActive}` : ''}`}
-        sx={[
-          ranges.every((range) => !isSameRange(range, selectedRange)) && {
+        sx={{
+          ...(ranges.every((range) => !isSameRange(range, selectedRange)) ? {
             backgroundColor: (theme) => theme.palette.primary.dark,
             color: 'primary.contrastText',
             '&:hover': {
               color: 'inherit'
             }
-          }
-        ]}
+          } : {})
+        }}
       >
         <ListItemText primaryTypographyProps={{
           className: classes.listItemTextTypography,
