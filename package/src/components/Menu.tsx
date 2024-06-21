@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
-import { Divider, Grid, Paper, SelectProps, Typography } from '@mui/material';
+import { Divider, Grid, Paper, Typography } from '@mui/material';
 import { differenceInCalendarMonths, format } from 'date-fns';
 import React, { ReactNode } from 'react';
 import {
@@ -9,11 +9,11 @@ import {
   NavigationAction,
   Setter
 } from '../types';
-import DefinedRanges from './DefinedRanges';
+import DefinedRanges, { DefinedRangesProps } from './DefinedRanges';
 import { MARKERS } from './Markers';
-import Month from './Month';
+import Month, { MonthProps } from './Month';
 
-interface MenuProps {
+export interface MenuProps {
   dateRange: DateRange;
   ranges: DefinedRange[];
   minDate: Date;
@@ -36,15 +36,12 @@ interface MenuProps {
     onMonthNavigate: (marker: symbol, action: NavigationAction) => void;
   };
   locale?: Locale;
-  DefinedRangesProps?: {
-    classes?: {
-      listItem?: string;
-      listItemActive?: string;
-      listItemTextTypography?: string;
-    },
-    allowCustomRangeLabel?: boolean;
-    customRangeLabel?: string;
-  }
+  DefinedRangesProps?: Pick<DefinedRangesProps,
+    "className" |
+    "classes" |
+    "allowCustomRangeLabel" |
+    "customRangeLabel"
+  >;
   className?: string;
   classes?: {
     rangesMenuDivider?: string;
@@ -56,40 +53,14 @@ interface MenuProps {
   hideRangeArrow?: boolean;
   hideHeaderDivider?: boolean;
   hideMonthDivider?: boolean;
-  MonthProps?: {
-    weekdaysDisplayLocale?: Locale;
-    weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"];
-    classes?: {
-      dayInMonthGrid?: string;
-      weekday?: string;
-      weekend?: string;
-    };
-  };
-  MonthHeaderProps?: {
-    customMonthLabels?: string[];
-    classes?: {
-      root?: string;
-      navWrap?: string;
-      nav?: string;
-    };
-    // eslint-disable-next-line no-unused-vars
-    renderPrevIcon?: (disabled?: boolean) => ReactNode;
-    // eslint-disable-next-line no-unused-vars
-    renderNextIcon?: (disabled?: boolean) => ReactNode;
-    selectProps?: SelectProps<number>;
-  };
-  MonthDayProps?: {
-    classes?: {
-      root?: string;
-      highlighted?: string;
-      btnFilled?: string;
-      text?: string;
-      weekendText?: string;
-      filledText?: string;
-    };
-    borderRadius?: string;
-    height?: any;
-  }
+  MonthProps?: Pick<MonthProps,
+    "weekdaysDisplayLocale" |
+    "weekStartOn" |
+    "classes" |
+    "containerSx"
+  >;
+  MonthHeaderProps?: MonthProps["MonthHeaderProps"];
+  MonthDayProps?: MonthProps["DayProps"];
 }
 
 const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {

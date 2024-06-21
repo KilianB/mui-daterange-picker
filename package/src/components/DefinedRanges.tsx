@@ -4,7 +4,7 @@ import { isSameDay } from 'date-fns';
 import React from 'react';
 import { DateRange, DefinedRange } from '../types';
 
-type DefinedRangesProps = {
+export type DefinedRangesProps = {
   // eslint-disable-next-line no-unused-vars
   setRange: (range: DateRange) => void;
   selectedRange: DateRange;

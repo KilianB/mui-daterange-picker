@@ -115,10 +115,12 @@ type MonthProps = {
   weekdaysDisplayLocale?: Locale;
   weekStartOn?: number; // 0 | 1 | 2 | 3 | 4 | 5 | 6
   classes?: {
+    root?: string; // Class applied to Month Container
     dayInMonthGrid?: string;
     weekday?: string;
     weekend?: string;
   };
+  containerSx?: SxProps; // MUI SxProps applied to Month Container
 };
 ```
 
@@ -144,11 +146,16 @@ type MonthHeaderProps = {
 type MonthDayProps = {
   classes?: {
     root?: string; // Class applied to Day box button
+    outlined?: string // Class applied to current date (outlined)
     highlighted?: string; // Class applied to highlighted days (days in range)
     btnFilled?: string; // Class applied to Start/End range day button
     text?: string; // Class applied to Day text
     weekendText?: string; // Class applied to Weekend day text
     filledText?: string; // Class applied to Start/End Range text
+    startOfRange?: string; // Class applied to Start range day wrapper
+    endOfRange?: string; // Class applied to End range day wrapper
+    btnStartOfRange?: string; // Class applied to Start range day button
+    btnEndOfRange?: string; // Class applied to End range day button
   };
   borderRadius?: string; // Radius of Day button
   height?: any; // In px or number, heigh of Day button

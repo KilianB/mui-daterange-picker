@@ -1,4 +1,4 @@
-import { Grid, Paper, SelectProps, Typography } from "@mui/material";
+import { Grid, Paper, SelectProps, SxProps, Typography } from "@mui/material";
 import {
   format,
   getDate, isSameMonth, isToday,
@@ -12,13 +12,13 @@ import {
   isRangeSameDay,
   isStartOfRange
 } from "../utils";
-import Day from "./Day";
+import Day, { DayProps } from "./Day";
 import Header from "./Header";
 
 import { DateRange, NavigationAction } from "../types";
 
 
-interface MonthProps {
+export interface MonthProps {
   value: Date;
   marker: symbol;
   dateRange: DateRange;
@@ -53,25 +53,20 @@ interface MonthProps {
     renderNextIcon?: (disabled?: boolean) => ReactNode;
     selectProps?: SelectProps<number>;
   };
+  containerSx?: SxProps;
   classes?: {
+    root?: string;
     dayInMonthGrid?: string;
     weekday?: string;
     weekend?: string;
   };
   weekdaysDisplayLocale?: Locale;
   weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"]
-  DayProps?: {
-    classes?: {
-      root?: string;
-      highlighted?: string;
-      btnFilled?: string;
-      text?: string;
-      weekendText?: string;
-      filledText?: string;
-    };
-    borderRadius?: string;
-    height?: any;
-  }
+  DayProps?: Pick<DayProps,
+    "classes" |
+    "borderRadius" |
+    "height"
+  >;
 }
 
 const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
@@ -88,7 +83,9 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     weekdaysDisplayLocale,
     weekStartOn: _weekStartOn,
     MonthHeaderProps,
+    containerSx,
     classes = {
+      root: '',
       dayInMonthGrid: '',
       weekday: '',
       weekend: ''
@@ -105,7 +102,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
   const [back, forward] = props.navState;
 
   return (
-    <Paper square elevation={0} sx={{ width: 290 }}>
+    <Paper square elevation={0} sx={containerSx ? containerSx : { width: 290 }} className={classes.root}>
       <Grid container>
         <Header
           date={date}

@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-import { Box, SelectProps } from '@mui/material';
-import DateRangePicker from './DateRangePicker';
+import { Box } from '@mui/material';
+import DateRangePicker, { DateRangePickerProps } from './DateRangePicker';
 
 // eslint-disable-next-line no-unused-vars
 import { DateRange, DefinedRange } from '../types';
@@ -18,62 +18,11 @@ export interface DateRangePickerWrapperProps {
   closeOnClickOutside?: boolean;
   wrapperClassName?: string;
   locale?: Locale;
-  DefinedRangesProps?: {
-    className?: string;
-    classes?: {
-      listItem?: string;
-      listItemActive?: string;
-      listItemTextTypography?: string;
-    },
-    allowCustomRangeLabel?: boolean;
-    customRangeLabel?: string;
-  };
-  MenuProps?: {
-    classes?: {
-      rangesMenuDivider?: string;
-      valueContainer?: string;
-      valueItem?: string;
-    };
-    // eslint-disable-next-line no-unused-vars
-    renderValue?: (valueType: "start" | "end", _?: Date, locale?: Locale) => ReactNode;
-    hideRangeArrow?: boolean;
-    hideHeaderDivider?: boolean;
-    hideMonthDivider?: boolean;
-  };
-  MonthProps?: {
-    weekdaysDisplayLocale?: Locale;
-    weekStartOn?: Required<Required<Locale>["options"]>["weekStartsOn"];
-    classes?: {
-      dayInMonthGrid?: string;
-      weekday?: string;
-      weekend?: string;
-    };
-  };
-  MonthHeaderProps?: {
-    customMonthLabels?: string[];
-    classes?: {
-      root?: string;
-      navWrap?: string;
-      nav?: string;
-    };
-    // eslint-disable-next-line no-unused-vars
-    renderPrevIcon?: (disabled?: boolean) => ReactNode;
-    // eslint-disable-next-line no-unused-vars
-    renderNextIcon?: (disabled?: boolean) => ReactNode;
-    selectProps?: SelectProps<number>;
-  };
-  MonthDayProps?: {
-    classes?: {
-      root?: string;
-      highlighted?: string;
-      btnFilled?: string;
-      text?: string;
-      weekendText?: string;
-      filledText?: string;
-    };
-    borderRadius?: string;
-    height?: any;
-  };
+  DefinedRangesProps?: DateRangePickerProps["DefinedRangesProps"];
+  MenuProps?: DateRangePickerProps["MenuProps"];
+  MonthProps?: DateRangePickerProps["MonthProps"];
+  MonthHeaderProps?: DateRangePickerProps["MonthHeaderProps"];
+  MonthDayProps?: DateRangePickerProps["MonthDayProps"];
 }
 
 const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (

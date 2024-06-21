@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import React from 'react';
 
-interface DayProps {
+export interface DayProps {
   filled?: boolean;
   outlined?: boolean;
   highlighted?: boolean;
@@ -14,12 +14,17 @@ interface DayProps {
   isWeekend?: boolean;
   classes?: {
     root?: string;
+    outlined?: string;
     highlighted?: string;
     btnOutlined?: string;
     btnFilled?: string;
     text?: string;
     weekendText?: string;
     filledText?: string;
+    startOfRange?: string;
+    endOfRange?: string;
+    btnStartOfRange?: string;
+    btnEndOfRange?: string;
   };
   borderRadius?: string;
   height?: any;
@@ -39,11 +44,16 @@ const Day: React.FunctionComponent<DayProps> = ({
   classes = {
     root: '',
     highlighted: '',
+    outlined: '',
     btnOutlined: '',
     btnFilled: '',
     text: '',
     weekendText: '',
-    filledText: ''
+    filledText: '',
+    startOfRange: '',
+    endOfRange: '',
+    btnStartOfRange: '',
+    btnEndOfRange: ''
   },
   borderRadius,
   height
@@ -51,7 +61,7 @@ const Day: React.FunctionComponent<DayProps> = ({
 
   return (
     <Box
-      className={`${classes.root}${!disabled && highlighted && classes.highlighted ? ` ${classes.highlighted}` : ''}`}
+      className={`${classes.root}${!disabled && highlighted && classes.highlighted ? ` ${classes.highlighted}` : ''}${outlined ? ` ${classes.outlined}` : ''}${startOfRange ? ` ${classes.startOfRange}` : ''}${endOfRange ? ` ${classes.endOfRange}` : ''}`}
       sx={{
         display: 'flex',
         // eslint-disable-next-line no-nested-ternary
@@ -60,7 +70,7 @@ const Day: React.FunctionComponent<DayProps> = ({
       }}
     >
       <IconButton
-        className={!disabled ? `${filled && classes.btnFilled ? classes.btnFilled : ''} ${outlined && classes.btnOutlined ? classes.btnOutlined : ''}` : undefined}
+        className={!disabled ? `${filled && classes.btnFilled ? classes.btnFilled : ''} ${outlined && classes.btnOutlined ? classes.btnOutlined : ''} ${startOfRange && classes.btnStartOfRange ? classes.btnStartOfRange : ''} ${endOfRange && classes.btnEndOfRange ? classes.btnEndOfRange : ''}` : undefined}
         sx={{
           height: height || '36px',
           width: '36px',
