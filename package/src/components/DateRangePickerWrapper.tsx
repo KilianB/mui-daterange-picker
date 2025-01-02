@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Box } from '@mui/material';
-import DateRangePicker, { DateRangePickerProps } from './DateRangePicker';
+import { Box } from "@mui/material";
+import DateRangePicker, { DateRangePickerProps } from "./DateRangePicker";
 
 // eslint-disable-next-line no-unused-vars
-import { DateRange, DefinedRange } from '../types';
+import { DateRange, DefinedRange } from "../types";
 
 export interface DateRangePickerWrapperProps {
   open: boolean;
@@ -23,31 +23,29 @@ export interface DateRangePickerWrapperProps {
   MonthProps?: DateRangePickerProps["MonthProps"];
   MonthHeaderProps?: DateRangePickerProps["MonthHeaderProps"];
   MonthDayProps?: DateRangePickerProps["MonthDayProps"];
+  CloseButtonProps?: DateRangePickerProps["CloseButtonProps"];
+  anchorRef: DateRangePickerProps["anchorRef"];
+  popperModifiers: DateRangePickerProps["popperModifiers"];
 }
 
 const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (
-  props: DateRangePickerWrapperProps,
+  props: DateRangePickerWrapperProps
 ) => {
-  const {
-    closeOnClickOutside,
-    wrapperClassName,
-    toggle,
-    open,
-  } = props;
+  const { wrapperClassName } = props;
 
-  const handleToggle = () => {
-    if (closeOnClickOutside === false) {
-      return;
-    }
+  // const handleToggle = () => {
+  //   if (closeOnClickOutside === false) {
+  //     return;
+  //   }
 
-    toggle();
-  };
+  //   toggle();
+  // };
 
-  const handleKeyPress = (event: any) => event?.key === 'Escape' && handleToggle();
+  // const handleKeyPress = (event: any) => event?.key === 'Escape' && handleToggle();
 
   return (
-    <Box sx={{ position: 'relative' }}>
-      {
+    <Box sx={{ position: "relative" }}>
+      {/* {
         open && (
           <Box
             sx={{
@@ -59,14 +57,15 @@ const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProp
               right: 0,
               left: 0,
               top: 0,
+              backgroundColor: 'rgba(30,30,30,0.5)'
             }}
             onKeyPress={handleKeyPress}
             onClick={handleToggle}
           />
         )
-      }
+      } */}
 
-      <Box sx={{ position: 'relative', zIndex: 1 }} className={wrapperClassName} >
+      <Box sx={{ position: "relative", zIndex: 1 }} className={wrapperClassName}>
         <DateRangePicker {...props} />
       </Box>
     </Box>

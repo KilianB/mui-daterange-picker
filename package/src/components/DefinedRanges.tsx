@@ -1,8 +1,14 @@
-import { List, ListItem, ListItemText, Theme } from '@mui/material';
+import { List, ListItem, ListItemText, Theme } from "@mui/material";
 import { SxProps } from "@mui/system";
-import { isSameDay } from 'date-fns';
-import React from 'react';
-import { DateRange, DefinedRange } from '../types';
+import { isSameDay } from "date-fns";
+import React from "react";
+import { DateRange, DefinedRange } from "../types";
+
+interface CustomDefinedComponentRenderer {
+  setRange: (range: DateRange) => void;
+  selectedRange: DateRange;
+  ranges: DefinedRange[];
+}
 
 export type DefinedRangesProps = {
   // eslint-disable-next-line no-unused-vars
@@ -14,9 +20,10 @@ export type DefinedRangesProps = {
     listItem?: string;
     listItemActive?: string;
     listItemTextTypography?: string;
-  },
+  };
   allowCustomRangeLabel?: boolean;
   customRangeLabel?: string;
+  customComponentRenderer?: (args: CustomDefinedComponentRenderer) => React.ReactElement;
 };
 
 const isSameRange = (first: DateRange, second: DateRange) => {
@@ -28,80 +35,105 @@ const isSameRange = (first: DateRange, second: DateRange) => {
   return false;
 };
 
-const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
+const DefinedRanges = ({
   ranges,
   setRange,
   selectedRange,
   className,
   classes = {
-    listItem: '',
-    listItemActive: '',
-    listItemTextTypography: ''
+    listItem: "",
+    listItemActive: "",
+    listItemTextTypography: "",
   },
   allowCustomRangeLabel,
-  customRangeLabel = ''
-}: DefinedRangesProps) => (
-  <List className={className}>
-    {ranges.map((range, idx) => {
-      const _isSameRange = isSameRange(range, selectedRange);
-      const sx: SxProps<Theme> = _isSameRange ? {
-        backgroundColor: (theme) => theme.palette.primary.dark,
-        color: 'primary.contrastText',
-        '&:hover': {
-          color: 'inherit'
-        }
-      } : {}
-      return (
-        <ListItem button
-          key={idx}
-          onClick={() => setRange(range)}
-          className={`${classes.listItem}${_isSameRange && classes.listItemActive ? ` ${classes.listItemActive}` : ''}`}
-          sx={sx}
-        >
-          <ListItemText
-            primaryTypographyProps={{
-              className: classes.listItemTextTypography,
-              variant: 'body2',
-              sx: {
-                fontWeight: _isSameRange
-                  ? 'bold'
-                  : 'normal',
+  customComponentRenderer,
+  customRangeLabel = "",
+}: DefinedRangesProps) => {
+  if (customComponentRenderer) {
+    return customComponentRenderer({
+      ranges,
+      selectedRange,
+      setRange,
+    });
+  }
+
+  return (
+    <List className={className}>
+      {ranges.map((range, idx) => {
+        const _isSameRange = isSameRange(range, selectedRange);
+        const sx: SxProps<Theme> = _isSameRange
+          ? {
+              backgroundColor: (theme) => theme.palette.primary.dark,
+              color: "primary.contrastText",
+              "&:hover": {
+                color: "inherit",
               },
+            }
+          : {};
+        return (
+          <ListItem
+            button
+            key={idx}
+            onClick={() => setRange(range)}
+            className={`${classes.listItem}${
+              _isSameRange && classes.listItemActive ? ` ${classes.listItemActive}` : ""
+            }`}
+            sx={sx}
+          >
+            <ListItemText
+              primaryTypographyProps={{
+                className: classes.listItemTextTypography,
+                variant: "body2",
+                sx: {
+                  fontWeight: _isSameRange ? "bold" : "normal",
+                },
+              }}
+            >
+              {range.label}
+            </ListItemText>
+          </ListItem>
+        );
+      })}
+      {allowCustomRangeLabel && (
+        <>
+          <ListItem
+            button
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            className={`${classes.listItem}${
+              ranges.every((range) => !isSameRange(range, selectedRange)) && classes.listItemActive
+                ? ` ${classes.listItemActive}`
+                : ""
+            }`}
+            sx={{
+              ...(ranges.every((range) => !isSameRange(range, selectedRange))
+                ? {
+                    backgroundColor: (theme) => theme.palette.primary.dark,
+                    color: "primary.contrastText",
+                    "&:hover": {
+                      color: "inherit",
+                    },
+                  }
+                : {}),
             }}
           >
-            {range.label}
-          </ListItemText>
-        </ListItem>
-      )
-    })}
-    {allowCustomRangeLabel && <>
-      <ListItem button
-        onClick={(e) => { e.preventDefault(); }}
-        className={`${classes.listItem}${ranges.every((range) => !isSameRange(range, selectedRange)) && classes.listItemActive ? ` ${classes.listItemActive}` : ''}`}
-        sx={{
-          ...(ranges.every((range) => !isSameRange(range, selectedRange)) ? {
-            backgroundColor: (theme) => theme.palette.primary.dark,
-            color: 'primary.contrastText',
-            '&:hover': {
-              color: 'inherit'
-            }
-          } : {})
-        }}
-      >
-        <ListItemText primaryTypographyProps={{
-          className: classes.listItemTextTypography,
-          variant: "body2",
-          sx: {
-            fontWeight: ranges.every((range) => !isSameRange(range, selectedRange))
-              ? 'bold'
-              : 'normal',
-          }
-        }}>
-          {customRangeLabel}
-        </ListItemText>
-      </ListItem>
-    </>}
-  </List>
-);
+            <ListItemText
+              primaryTypographyProps={{
+                className: classes.listItemTextTypography,
+                variant: "body2",
+                sx: {
+                  fontWeight: ranges.every((range) => !isSameRange(range, selectedRange)) ? "bold" : "normal",
+                },
+              }}
+            >
+              {customRangeLabel}
+            </ListItemText>
+          </ListItem>
+        </>
+      )}
+    </List>
+  );
+};
 
 export default DefinedRanges;

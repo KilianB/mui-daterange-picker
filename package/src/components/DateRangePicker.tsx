@@ -1,16 +1,43 @@
-import {
-  addMonths, addYears, isAfter, isBefore, isSameDay, isSameMonth, isWithinInterval, max, min,
-} from 'date-fns';
-import * as React from 'react';
-import { getDefaultRanges } from '../defaults';
-import { DateRange, DefinedRange, NavigationAction } from '../types';
-import { getValidatedMonths, parseOptionalDate } from '../utils';
+import { addMonths, addYears, isAfter, isBefore, isSameDay, isSameMonth, isWithinInterval, max, min } from "date-fns";
+import * as React from "react";
+import { getDefaultRanges } from "../defaults";
+import { DateRange, DefinedRange, NavigationAction } from "../types";
+import { getValidatedMonths, parseOptionalDate } from "../utils";
 import { DefinedRangesProps } from "./DefinedRanges";
-import { MARKERS, Marker } from './Markers';
-import Menu, { MenuProps } from './Menu';
+import { MARKERS, Marker } from "./Markers";
+import Menu, { MenuProps } from "./Menu";
+import { ClickAwayListener, ClickAwayListenerProps, Popper, PopperProps } from "@mui/material";
+
+interface ConditionalClickAwayListenerProps extends ClickAwayListenerProps {
+  enabled: boolean;
+}
+
+const ConditionalClickAwayListener = React.forwardRef<any, ConditionalClickAwayListenerProps>(
+  ({ children, enabled, ...clickAWayOriginalProps }, ref) => {
+    if (enabled) {
+      return (
+        <ClickAwayListener ref={ref} {...clickAWayOriginalProps}>
+          {children}
+        </ClickAwayListener>
+      );
+    } else {
+      return <>{children}</>;
+    }
+  }
+);
+
+ConditionalClickAwayListener.displayName = "ConditionalClickAwayListener";
+
+// {
+//   children,
+//   enabled,
+//
+// }
 
 export interface DateRangePickerProps {
   open: boolean;
+
+  toggle: () => void;
   initialDateRange?: DateRange;
   definedRanges?: DefinedRange[];
   minDate?: Date | string;
@@ -18,27 +45,27 @@ export interface DateRangePickerProps {
   // eslint-disable-next-line no-unused-vars
   onChange: (dateRange: DateRange) => void;
   locale?: Locale;
-  DefinedRangesProps?: Pick<DefinedRangesProps,
-    "className" |
-    "classes" |
-    "allowCustomRangeLabel" |
-    "customRangeLabel"
-  >;
-  MenuProps?: Pick<MenuProps,
-    "classes" |
-    "renderValue" |
-    "hideRangeArrow" |
-    "hideHeaderDivider" |
-    "hideMonthDivider"
+  DefinedRangesProps?: Pick<DefinedRangesProps, "className" | "classes" | "allowCustomRangeLabel" | "customRangeLabel">;
+  MenuProps?: Pick<
+    MenuProps,
+    | "classes"
+    | "renderValue"
+    | "hideRangeArrow"
+    | "hideHeaderDivider"
+    | "hideMonthDivider"
+    | "hideCloseButton"
+    | "renderHeader"
   >;
   MonthProps?: MenuProps["MonthProps"];
   MonthHeaderProps?: MenuProps["MonthHeaderProps"];
   MonthDayProps?: MenuProps["MonthDayProps"];
+  CloseButtonProps?: MenuProps["closeButtonProps"];
+  anchorRef: React.RefObject<HTMLElement>;
+  closeOnClickOutside?: boolean;
+  popperModifiers: PopperProps["modifiers"];
 }
 
-const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
-  props: DateRangePickerProps,
-) => {
+const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (props: DateRangePickerProps) => {
   const today = new Date();
 
   const {
@@ -50,26 +77,25 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     definedRanges = getDefaultRanges(new Date(), props.locale),
     locale,
     DefinedRangesProps,
+    closeOnClickOutside,
     MenuProps,
     MonthProps,
     MonthHeaderProps,
-    MonthDayProps
+    MonthDayProps,
+    CloseButtonProps,
+    anchorRef,
+    popperModifiers,
+    toggle,
   } = props;
 
   const minDateValid = parseOptionalDate(minDate, addYears(today, -10));
   const maxDateValid = parseOptionalDate(maxDate, addYears(today, 10));
-  const [intialFirstMonth, initialSecondMonth] = getValidatedMonths(
-    initialDateRange || {},
-    minDateValid,
-    maxDateValid,
-  );
+  const [intialFirstMonth, initialSecondMonth] = getValidatedMonths(initialDateRange || {}, minDateValid, maxDateValid);
 
   const [dateRange, setDateRange] = React.useState<DateRange>({ ...initialDateRange });
   const [hoverDay, setHoverDay] = React.useState<Date>();
   const [firstMonth, setFirstMonth] = React.useState<Date>(intialFirstMonth || today);
-  const [secondMonth, setSecondMonth] = React.useState<Date>(
-    initialSecondMonth || addMonths(firstMonth, 1),
-  );
+  const [secondMonth, setSecondMonth] = React.useState<Date>(initialSecondMonth || addMonths(firstMonth, 1));
 
   const { startDate, endDate } = dateRange;
 
@@ -121,6 +147,13 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
   };
 
   const onMonthNavigate = (marker: Marker, action: NavigationAction) => {
+    if (marker === MARKERS.BOTH_MONTHS) {
+      const firstNew = addMonths(firstMonth, action);
+      const secondNew = addMonths(secondMonth, action);
+      setFirstMonth(firstNew);
+      setSecondMonth(secondNew);
+    }
+
     if (marker === MARKERS.FIRST_MONTH) {
       const firstNew = addMonths(firstMonth, action);
       if (isBefore(firstNew, secondMonth)) setFirstMonth(firstNew);
@@ -139,11 +172,12 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
   };
 
   // helpers
-  const inHoverRange = (day: Date) => (startDate
-    && !endDate
-    && hoverDay
-    && isAfter(hoverDay, startDate)
-    && isWithinInterval(day, { start: startDate, end: hoverDay })) as boolean;
+  const inHoverRange = (day: Date) =>
+    (startDate &&
+      !endDate &&
+      hoverDay &&
+      isAfter(hoverDay, startDate) &&
+      isWithinInterval(day, { start: startDate, end: hoverDay })) as boolean;
 
   const helpers = {
     inHoverRange,
@@ -155,27 +189,40 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     onMonthNavigate,
   };
 
-  return open ? (
-    <Menu
-      dateRange={dateRange}
-      minDate={minDateValid}
-      maxDate={maxDateValid}
-      ranges={definedRanges}
-      firstMonth={firstMonth}
-      secondMonth={secondMonth}
-      setFirstMonth={setFirstMonthValidated}
-      setSecondMonth={setSecondMonthValidated}
-      setDateRange={setDateRangeValidated}
-      helpers={helpers}
-      handlers={handlers}
-      locale={locale}
-      DefinedRangesProps={DefinedRangesProps}
-      MonthProps={MonthProps}
-      MonthHeaderProps={MonthHeaderProps}
-      MonthDayProps={MonthDayProps}
-      {...MenuProps}
-    />
-  ) : null;
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+    toggle();
+  };
+
+  return (
+    <Popper open={open} anchorEl={anchorRef?.current} sx={{ zIndex: 1 }} modifiers={popperModifiers}>
+      <ConditionalClickAwayListener enabled={closeOnClickOutside !== false} onClickAway={handleClose}>
+        <Menu
+          dateRange={dateRange}
+          minDate={minDateValid}
+          maxDate={maxDateValid}
+          ranges={definedRanges}
+          firstMonth={firstMonth}
+          secondMonth={secondMonth}
+          setFirstMonth={setFirstMonthValidated}
+          setSecondMonth={setSecondMonthValidated}
+          setDateRange={setDateRangeValidated}
+          helpers={helpers}
+          handlers={handlers}
+          locale={locale}
+          DefinedRangesProps={DefinedRangesProps}
+          MonthProps={MonthProps}
+          MonthHeaderProps={MonthHeaderProps}
+          MonthDayProps={MonthDayProps}
+          toggle={toggle}
+          closeButtonProps={CloseButtonProps}
+          {...MenuProps}
+        />
+      </ConditionalClickAwayListener>
+    </Popper>
+  );
 };
 
 export default DateRangePicker;

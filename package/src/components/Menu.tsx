@@ -1,18 +1,22 @@
 /* eslint-disable object-curly-newline */
-import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
-import { Divider, Grid, Paper, Typography } from '@mui/material';
-import { differenceInCalendarMonths, format } from 'date-fns';
-import React, { ReactNode } from 'react';
-import {
-  DateRange,
-  DefinedRange,
-  NavigationAction,
-  Setter
-} from '../types';
-import DefinedRanges, { DefinedRangesProps } from './DefinedRanges';
-import { MARKERS } from './Markers';
-import Month, { MonthProps } from './Month';
+import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
+import { Box, Button, Divider, Grid, Paper, Typography, ButtonProps, IconButton } from "@mui/material";
+import { differenceInCalendarMonths, format } from "date-fns";
+import React, { ReactNode } from "react";
+import { DateRange, DefinedRange, NavigationAction, Setter } from "../types";
+import DefinedRanges, { DefinedRangesProps } from "./DefinedRanges";
+import { MARKERS } from "./Markers";
+import Month, { MonthProps } from "./Month";
 
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+
+interface CustomComponentRenderer {
+  setRange: (range: DateRange) => void;
+  selectedRange: DateRange;
+  ranges: DefinedRange[];
+}
 export interface MenuProps {
   dateRange: DateRange;
   ranges: DefinedRange[];
@@ -36,11 +40,9 @@ export interface MenuProps {
     onMonthNavigate: (marker: symbol, action: NavigationAction) => void;
   };
   locale?: Locale;
-  DefinedRangesProps?: Pick<DefinedRangesProps,
-    "className" |
-    "classes" |
-    "allowCustomRangeLabel" |
-    "customRangeLabel"
+  DefinedRangesProps?: Pick<
+    DefinedRangesProps,
+    "className" | "classes" | "allowCustomRangeLabel" | "customRangeLabel" | "customComponentRenderer"
   >;
   className?: string;
   classes?: {
@@ -50,20 +52,26 @@ export interface MenuProps {
   };
   // eslint-disable-next-line no-unused-vars
   renderValue?: (valueType: "start" | "end", _?: Date, locale?: Locale) => ReactNode;
+  renderHeader?: (args: CustomComponentRenderer) => ReactNode;
   hideRangeArrow?: boolean;
   hideHeaderDivider?: boolean;
   hideMonthDivider?: boolean;
-  MonthProps?: Pick<MonthProps,
-    "weekdaysDisplayLocale" |
-    "weekStartOn" |
-    "classes" |
-    "containerSx"
-  >;
+  MonthProps?: Pick<MonthProps, "weekdaysDisplayLocale" | "weekStartOn" | "classes" | "containerSx">;
   MonthHeaderProps?: MonthProps["MonthHeaderProps"];
   MonthDayProps?: MonthProps["DayProps"];
+  hideCloseButton?: boolean;
+  closeButtonProps?: {
+    label?: string;
+    hideDivider?: boolean;
+    classes?: {
+      wrapper?: string;
+    };
+    buttonProps?: ButtonProps;
+  };
+  toggle: () => void;
 }
 
-const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
+const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps>((props,ref) => {
   const {
     ranges,
     dateRange,
@@ -86,53 +94,74 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
     MonthHeaderProps,
     MonthDayProps,
     className,
+    hideCloseButton,
+    renderHeader,
+    toggle,
     classes = {
-      rangesMenuDivider: '',
-      valueContainer: '',
-      valueItem: ''
-    }
+      rangesMenuDivider: "",
+      valueContainer: "",
+      valueItem: "",
+    },
+    closeButtonProps,
   } = props;
 
   const { startDate, endDate } = dateRange;
   const canNavigateCloser = differenceInCalendarMonths(secondMonth, firstMonth) >= 2;
   const commonProps = {
-    dateRange, minDate, maxDate, helpers, handlers,
+    dateRange,
+    minDate,
+    maxDate,
+    helpers,
+    handlers,
     MonthHeaderProps,
     DayProps: MonthDayProps,
     ...MonthProps,
   };
+
   return (
-    <Paper elevation={5} square className={className}>
+    <Paper elevation={5} square className={className} ref={ref}>
       <Grid container direction="row" wrap="nowrap">
         <Grid>
-          <DefinedRanges
-            selectedRange={dateRange}
-            ranges={ranges}
-            setRange={setDateRange}
-            {...DefinedRangesProps}
-          />
+          <DefinedRanges selectedRange={dateRange} ranges={ranges} setRange={setDateRange} {...DefinedRangesProps} />
         </Grid>
         <Divider orientation="vertical" flexItem className={classes.rangesMenuDivider} />
         <Grid>
-          <Grid container className={classes.valueContainer} sx={{ padding: '20px 70px' }} alignItems="center">
-            <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
-              {renderValue
-                ? renderValue("start", startDate, locale)
-                : <Typography variant="subtitle1">
-                  {startDate ? format(startDate, 'dd MMMM yyyy', { locale }) : 'Start Date'}
-                </Typography>}
-
-            </Grid>
-            {!hideRangeArrow && <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
-              <ArrowRightAlt color="action" />
-            </Grid>}
-            <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: 'center' }}>
-              {renderValue
-                ? renderValue("end", endDate, locale)
-                : <Typography variant="subtitle1">
-                  {endDate ? format(endDate, 'dd MMMM yyyy', { locale }) : 'End Date'}
-                </Typography>}
-            </Grid>
+          <Grid container className={classes.valueContainer} sx={{ padding: "20px 70px" }} alignItems="center">
+            {renderHeader ? (
+              <Grid item className={classes.valueItem} sx={{ flex: 1 }}>
+                {renderHeader({
+                  selectedRange: dateRange,
+                  ranges: ranges,
+                  setRange: setDateRange,
+                })}
+              </Grid>
+            ) : (
+              <>
+                <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: "center" }}>
+                  {renderValue ? (
+                    renderValue("start", startDate, locale)
+                  ) : (
+                    <Typography variant="subtitle1">
+                      {startDate ? format(startDate, "dd MMMM yyyy", { locale }) : "Start Date"}
+                    </Typography>
+                  )}
+                </Grid>
+                {!hideRangeArrow && (
+                  <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: "center" }}>
+                    <ArrowRightAlt color="action" />
+                  </Grid>
+                )}
+                <Grid item className={classes.valueItem} sx={{ flex: 1, textAlign: "center" }}>
+                  {renderValue ? (
+                    renderValue("end", endDate, locale)
+                  ) : (
+                    <Typography variant="subtitle1">
+                      {endDate ? format(endDate, "dd MMMM yyyy", { locale }) : "End Date"}
+                    </Typography>
+                  )}
+                </Grid>
+              </>
+            )}
           </Grid>
           {!hideHeaderDivider && <Divider />}
           <Grid container direction="row" justifyContent="center" wrap="nowrap">
@@ -156,8 +185,79 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
           </Grid>
         </Grid>
       </Grid>
+      {hideCloseButton !== true && (
+        <>
+          {closeButtonProps?.hideDivider !== true && <Divider></Divider>}
+          <Box display={"flex"} className={closeButtonProps?.classes?.wrapper} justifyContent={"end"}>
+            <Button
+              sx={{
+                marginY: "0.5em",
+              }}
+              onClick={toggle}
+              {...closeButtonProps?.buttonProps}
+            >
+              {closeButtonProps?.label ?? "Done"}
+            </Button>
+          </Box>
+        </>
+      )}
+      <Box
+        sx={{
+          zIndex: 10,
+          position: "absolute",
+          left: "0px",
+          top: "50%",
+          transform: "translateX(-50%)",
+          display:
+            firstMonth.getMonth() > minDate.getMonth() || firstMonth.getFullYear() > minDate.getFullYear()
+              ? "inherit"
+              : "none",
+        }}
+      >
+        <IconButton
+          sx={{
+            backgroundColor: "white",
+            ":hover": {
+              backgroundColor: "#f7f8f8",
+            },
+            boxShadow: 2,
+          }}
+          onClick={() => handlers.onMonthNavigate(MARKERS.BOTH_MONTHS, NavigationAction.Previous)}
+        >
+          <NavigateBeforeIcon color="primary" />
+        </IconButton>
+      </Box>
+
+      <Box
+        sx={{
+          zIndex: 10,
+          position: "absolute",
+          right: "0px",
+          top: "50%",
+          transform: "translateX(+50%)",
+          display:
+            secondMonth.getMonth() < maxDate.getMonth() || secondMonth.getFullYear() < maxDate.getFullYear()
+              ? "inherit"
+              : "none",
+        }}
+      >
+        <IconButton
+          sx={{
+            backgroundColor: "white",
+            ":hover": {
+              backgroundColor: "#f7f8f8",
+            },
+            boxShadow: 2,
+          }}
+          onClick={() => handlers.onMonthNavigate(MARKERS.BOTH_MONTHS, NavigationAction.Next)}
+        >
+          <NavigateNextIcon color="primary" />
+        </IconButton>
+      </Box>
     </Paper>
   );
-};
+});
+
+Menu.displayName = "Menu";
 
 export default Menu;

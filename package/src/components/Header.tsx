@@ -1,11 +1,12 @@
-import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import ChevronRight from '@mui/icons-material/ChevronRight';
-import { FormControl, Grid, IconButton, MenuItem, Select, SelectChangeEvent, SelectProps } from '@mui/material';
-import { getMonth, getYear, setMonth, setYear } from 'date-fns';
-import React, { ReactNode } from 'react';
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import ChevronRight from "@mui/icons-material/ChevronRight";
+import { Box, FormControl, Grid, IconButton, MenuItem, Select, SelectChangeEvent, SelectProps } from "@mui/material";
+import { getMonth, getYear, setMonth, setYear } from "date-fns";
+import React, { ReactNode } from "react";
 
 interface HeaderProps {
   date: Date;
+  variant?: "default" | "simple";
   // eslint-disable-next-line no-unused-vars
   setDate: (date: Date) => void;
   nextDisabled: boolean;
@@ -44,18 +45,55 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   renderPrevIcon,
   renderNextIcon,
   selectProps,
+  variant,
   customMonthLabels,
   classes = {
-    root: '',
-    navWrap: '',
-    nav: ''
-  }
+    root: "",
+    navWrap: "",
+    nav: "",
+  },
 }: HeaderProps) => {
-  const MONTHS = typeof customMonthLabels !== "undefined" && customMonthLabels.length === 12
-    ? customMonthLabels
-    : (typeof locale !== 'undefined'
-      ? [...Array(12).keys()].map(d => locale.localize?.month(d, { width: 'abbreviated', context: 'standalone' }))
-      : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']);
+  if (variant === "simple") {
+    const MONTHSLONG =
+      typeof customMonthLabels !== "undefined" && customMonthLabels.length === 12
+        ? customMonthLabels
+        : typeof locale !== "undefined"
+        ? [...Array(12).keys()].map((d) => locale.localize?.month(d, { width: "wide", context: "standalone" }))
+        : [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+
+    return (
+      <Box
+        className={classes.root}
+        width={"100%"}
+        textAlign={"center"}
+        marginY={"12px"}
+        fontWeight={500}
+        fontSize={"large"}
+      >
+        {MONTHSLONG[getMonth(date)]}
+      </Box>
+    );
+  }
+
+  const MONTHS =
+    typeof customMonthLabels !== "undefined" && customMonthLabels.length === 12
+      ? customMonthLabels
+      : typeof locale !== "undefined"
+      ? [...Array(12).keys()].map((d) => locale.localize?.month(d, { width: "abbreviated", context: "standalone" }))
+      : ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
   const handleMonthChange = (event: SelectChangeEvent<number>) => {
     setDate(setMonth(date, parseInt(event.target.value as string, 10)));
@@ -67,20 +105,20 @@ const Header: React.FunctionComponent<HeaderProps> = ({
 
   return (
     <Grid container className={classes.root} justifyContent="space-between" alignItems="center">
-      <Grid item className={classes.navWrap} sx={{ padding: '5px' }}>
+      <Grid item className={classes.navWrap} sx={{ padding: "5px" }}>
         <IconButton
           className={classes.nav}
           sx={{
-            padding: '10px',
-            '&:hover': {
-              background: 'none',
+            padding: "10px",
+            "&:hover": {
+              background: "none",
             },
           }}
           disabled={prevDisabled}
           onClick={onClickPrevious}
-        // size="large"
+          // size="large"
         >
-          {renderPrevIcon ? renderPrevIcon(prevDisabled) : <ChevronLeft color={prevDisabled ? 'disabled' : 'action'} />}
+          {renderPrevIcon ? renderPrevIcon(prevDisabled) : <ChevronLeft color={prevDisabled ? "disabled" : "action"} />}
         </IconButton>
       </Grid>
       <Grid item>
@@ -118,20 +156,24 @@ const Header: React.FunctionComponent<HeaderProps> = ({
 
         {/* <Typography>{format(date, "MMMM YYYY")}</Typography> */}
       </Grid>
-      <Grid item className={classes.navWrap} sx={{ padding: '5px' }}>
+      <Grid item className={classes.navWrap} sx={{ padding: "5px" }}>
         <IconButton
           className={classes.nav}
           sx={{
-            padding: '10px',
-            '&:hover': {
-              background: 'none',
+            padding: "10px",
+            "&:hover": {
+              background: "none",
             },
           }}
           disabled={nextDisabled}
           onClick={onClickNext}
-        // size="large"
+          // size="large"
         >
-          {renderNextIcon ? renderNextIcon(nextDisabled) : <ChevronRight color={nextDisabled ? 'disabled' : 'action'} />}
+          {renderNextIcon ? (
+            renderNextIcon(nextDisabled)
+          ) : (
+            <ChevronRight color={nextDisabled ? "disabled" : "action"} />
+          )}
         </IconButton>
       </Grid>
     </Grid>
