@@ -12,19 +12,17 @@ interface ConditionalClickAwayListenerProps extends ClickAwayListenerProps {
   enabled: boolean;
 }
 
-const ConditionalClickAwayListener = React.forwardRef<any, ConditionalClickAwayListenerProps>(
-  ({ children, enabled, ...clickAWayOriginalProps }, ref) => {
-    if (enabled) {
-      return (
-        <ClickAwayListener ref={ref} {...clickAWayOriginalProps}>
-          {children}
-        </ClickAwayListener>
-      );
-    } else {
-      return <>{children}</>;
-    }
+const ConditionalClickAwayListener: React.FC<ConditionalClickAwayListenerProps> = ({
+  children,
+  enabled,
+  ...clickAWayOriginalProps
+}) => {
+  if (enabled) {
+    return <ClickAwayListener {...clickAWayOriginalProps}>{children}</ClickAwayListener>;
+  } else {
+    return <>{children}</>;
   }
-);
+};
 
 ConditionalClickAwayListener.displayName = "ConditionalClickAwayListener";
 
@@ -60,7 +58,7 @@ export interface DateRangePickerProps {
   MonthHeaderProps?: MenuProps["MonthHeaderProps"];
   MonthDayProps?: MenuProps["MonthDayProps"];
   CloseButtonProps?: MenuProps["closeButtonProps"];
-  anchorRef: React.RefObject<HTMLElement>;
+  anchorRef: React.RefObject<HTMLElement | null>;
   closeOnClickOutside?: boolean;
   popperModifiers: PopperProps["modifiers"];
 }
@@ -197,7 +195,7 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (props: D
   };
 
   return (
-    <Popper open={open} anchorEl={anchorRef?.current} sx={{ zIndex: 1 }} modifiers={popperModifiers}>
+    <Popper open={open} anchorEl={anchorRef && anchorRef.current} sx={{ zIndex: 1 }} modifiers={popperModifiers}>
       <ConditionalClickAwayListener enabled={closeOnClickOutside !== false} onClickAway={handleClose}>
         <Menu
           dateRange={dateRange}

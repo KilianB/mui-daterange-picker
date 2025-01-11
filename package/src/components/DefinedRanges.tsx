@@ -1,5 +1,4 @@
-import { List, ListItem, ListItemText, Theme } from "@mui/material";
-import { SxProps } from "@mui/system";
+import { List, ListItem, ListItemText, SxProps, Theme } from "@mui/material";
 import { isSameDay } from "date-fns";
 import React from "react";
 import { DateRange, DefinedRange } from "../types";
@@ -72,7 +71,7 @@ const DefinedRanges = ({
           : {};
         return (
           <ListItem
-            button
+            component={"button"}
             key={idx}
             onClick={() => setRange(range)}
             className={`${classes.listItem}${
@@ -97,7 +96,7 @@ const DefinedRanges = ({
       {allowCustomRangeLabel && (
         <>
           <ListItem
-            button
+            component={"button"}
             onClick={(e) => {
               e.preventDefault();
             }}

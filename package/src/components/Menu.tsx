@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import { Box, Button, Divider, Grid, Paper, Typography, ButtonProps, IconButton } from "@mui/material";
 import { differenceInCalendarMonths, format } from "date-fns";
@@ -71,7 +70,7 @@ export interface MenuProps {
   toggle: () => void;
 }
 
-const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps>((props,ref) => {
+const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps>((props, ref) => {
   const {
     ranges,
     dateRange,
