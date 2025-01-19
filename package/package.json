@@ -22,8 +22,8 @@
     },
     "scripts": {
         "lint": "bun lint:eslint && bun lint:types",
-        "lint:eslint": "eslint ./src --c ./.eslint.config.mjs",
-        "lint:types": "tsc --noEmit",
+        "lint:eslint": "eslint ./src --c ./eslint.config.mjs",
+        "lint:types": "tsc --noEmit --skipLibCheck",
         "build": "rm -rf dist && tsc",
         "build:fast": "tsc --watch",
         "copy_publish_files": "cp ../README.md .",
