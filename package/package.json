@@ -9,12 +9,13 @@
         }
     ],
     "license": "MIT",
-    "repository": "kilianB/mui-daterange-picker",
+    "repository": "kilianb/mui-daterange-picker",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "jsnext:main": "dist/index.es.js",
     "publishConfig": {
-        "access": "public"
+        "access": "public",
+        "registry": "https://npm.pkg.github.com"
     },
     "engines": {
         "node": ">=8",
