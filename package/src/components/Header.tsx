@@ -1,8 +1,9 @@
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { Box, FormControl, Grid, IconButton, MenuItem, Select, SelectChangeEvent, SelectProps } from "@mui/material";
-import { getMonth, getYear, setMonth, setYear } from "date-fns";
+import { getMonth, getYear, Locale, Month, setMonth, setYear } from "date-fns";
 import React, { ReactNode } from "react";
+import { monthArray } from "../utils";
 
 interface HeaderProps {
   date: Date;
@@ -58,7 +59,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
       typeof customMonthLabels !== "undefined" && customMonthLabels.length === 12
         ? customMonthLabels
         : typeof locale !== "undefined"
-        ? [...Array(12).keys()].map((d) => locale.localize?.month(d, { width: "wide", context: "standalone" }))
+        ? monthArray.map((m) => locale.localize?.month(m, { width: "wide", context: "standalone" }))
         : [
             "January",
             "February",
@@ -92,7 +93,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
     typeof customMonthLabels !== "undefined" && customMonthLabels.length === 12
       ? customMonthLabels
       : typeof locale !== "undefined"
-      ? [...Array(12).keys()].map((d) => locale.localize?.month(d, { width: "abbreviated", context: "standalone" }))
+      ? monthArray.map((d) => locale.localize?.month(d, { width: "abbreviated", context: "standalone" }))
       : ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
   const handleMonthChange = (event: SelectChangeEvent<number>) => {

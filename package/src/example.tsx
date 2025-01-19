@@ -8,12 +8,13 @@ const App: React.FunctionComponent<Props> = () => {
   const [dateRange, setDateRange] = React.useState<DateRange>({});
 
   const toggle = () => setOpen(!open);
+  console.log(dateRange);
 
-  const ref = React.useRef<HTMLElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
 
   return (
     <div ref={ref}>
-      <DateRangePicker  anchorRef={ref} open={open} toggle={toggle} onChange={(range: DateRange) => setDateRange(range)} />;
+      <DateRangePicker popperModifiers={undefined}  anchorRef={ref} open={open} toggle={toggle} onChange={(range: DateRange) => setDateRange(range)} />;
     </div>
   );
 };

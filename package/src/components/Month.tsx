@@ -1,7 +1,7 @@
 import { Grid, Paper, SelectProps, SxProps, Typography } from "@mui/material";
-import { format, getDate, isSameMonth, isToday, isWithinInterval } from "date-fns";
+import { type Day as DayType, format, getDate, isSameMonth, isToday, isWithinInterval, Locale } from "date-fns";
 import React, { ReactNode } from "react";
-import { chunks, getDaysInMonth, inDateRange, isEndOfRange, isRangeSameDay, isStartOfRange } from "../utils";
+import { chunks, dayArray, getDaysInMonth, inDateRange, isEndOfRange, isRangeSameDay, isStartOfRange } from "../utils";
 import Day, { DayProps } from "./Day";
 import Header from "./Header";
 
@@ -14,18 +14,14 @@ export interface MonthProps {
   minDate: Date;
   maxDate: Date;
   navState: [boolean, boolean];
-  // eslint-disable-next-line no-unused-vars
+
   setValue: (date: Date) => void;
   helpers: {
-    // eslint-disable-next-line no-unused-vars
     inHoverRange: (day: Date) => boolean;
   };
   handlers: {
-    // eslint-disable-next-line no-unused-vars
     onDayClick: (day: Date) => void;
-    // eslint-disable-next-line no-unused-vars
     onDayHover: (day: Date) => void;
-    // eslint-disable-next-line no-unused-vars
     onMonthNavigate: (marker: symbol, action: NavigationAction) => void;
   };
   locale?: Locale;
@@ -38,9 +34,7 @@ export interface MonthProps {
       navWrap?: string;
       nav?: string;
     };
-    // eslint-disable-next-line no-unused-vars
     renderPrevIcon?: (disabled?: boolean) => ReactNode;
-    // eslint-disable-next-line no-unused-vars
     renderNextIcon?: (disabled?: boolean) => ReactNode;
     selectProps?: SelectProps<number>;
   };
@@ -83,12 +77,15 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
   const weekStartsOn = typeof _weekStartOn !== "undefined" ? _weekStartOn : locale?.options?.weekStartsOn || 0;
   const WEEK_DAYS =
     typeof weekdaysDisplayLocale !== "undefined"
-      ? [...Array(7).keys()].map((d) =>
-          weekdaysDisplayLocale.localize?.day((d + weekStartsOn) % 7, { width: "short", context: "standalone" })
+      ? dayArray.map((d) =>
+          weekdaysDisplayLocale.localize?.day(((d + weekStartsOn) % 7) as DayType, {
+            width: "short",
+            context: "standalone",
+          })
         )
       : typeof locale !== "undefined"
-      ? [...Array(7).keys()].map((d) =>
-          locale.localize?.day((d + weekStartsOn) % 7, { width: "short", context: "standalone" })
+      ? dayArray.map((d) =>
+          locale.localize?.day(((d + weekStartsOn) % 7) as DayType, { width: "short", context: "standalone" })
         )
       : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
   const [back, forward] = props.navState;

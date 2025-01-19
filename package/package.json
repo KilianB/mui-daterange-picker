@@ -21,7 +21,9 @@
         "npm": ">=5"
     },
     "scripts": {
-        "lint": "eslint ./src --c ./.eslint.config.mjs",
+        "lint": "bun lint:eslint && bun lint:types",
+        "lint:eslint": "eslint ./src --c ./.eslint.config.mjs",
+        "lint:types": "tsc --noEmit",
         "build": "rm -rf dist && tsc",
         "build:fast": "tsc --watch",
         "copy_publish_files": "cp ../README.md .",
@@ -29,7 +31,7 @@
     },
     "dependencies": {},
     "peerDependencies": {
-        "date-fns": "^2.30.0",
+        "date-fns": "^4.1.0",
         "@emotion/react": "11.14.0",
         "@emotion/styled": "11.14.0",
         "@mui/material": "6.4.0",
@@ -42,7 +44,7 @@
         "@types/react": "^19.0.7",
         "@typescript-eslint/eslint-plugin": "^8.20.0",
         "@typescript-eslint/parser": "^8.20.0",
-        "date-fns": "^2.30.0",
+        "date-fns": "^4.1.0",
         "eslint": "^9.18.0",
         "eslint-plugin-react": "^7.37.4",
         "eslint-plugin-react-hooks": "^5.1.0",

@@ -3,8 +3,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import DateRangePicker, { DateRangePickerProps } from "./DateRangePicker";
 
-// eslint-disable-next-line no-unused-vars
 import { DateRange, DefinedRange } from "../types";
+import { Locale } from "date-fns";
 
 export interface DateRangePickerWrapperProps {
   open: boolean;

@@ -1,6 +1,6 @@
 import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import { Box, Button, Divider, Grid, Paper, Typography, ButtonProps, IconButton } from "@mui/material";
-import { differenceInCalendarMonths, format } from "date-fns";
+import { differenceInCalendarMonths, format, Locale } from "date-fns";
 import React, { CSSProperties, ReactNode } from "react";
 import { DateRange, DefinedRange, NavigationAction, Setter } from "../types";
 import DefinedRanges, { DefinedRangesProps } from "./DefinedRanges";
