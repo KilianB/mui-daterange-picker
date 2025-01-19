@@ -10,7 +10,6 @@ interface CustomDefinedComponentRenderer {
 }
 
 export type DefinedRangesProps = {
-  // eslint-disable-next-line no-unused-vars
   setRange: (range: DateRange) => void;
   selectedRange: DateRange;
   ranges: DefinedRange[];

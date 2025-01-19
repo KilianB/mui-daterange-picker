@@ -1,14 +1,13 @@
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { Box, FormControl, Grid, IconButton, MenuItem, Select, SelectChangeEvent, SelectProps } from "@mui/material";
-import { getMonth, getYear, Locale, Month, setMonth, setYear } from "date-fns";
+import { getMonth, getYear, Locale, setMonth, setYear } from "date-fns";
 import React, { ReactNode } from "react";
 import { monthArray } from "../utils";
 
 interface HeaderProps {
   date: Date;
   variant?: "default" | "simple";
-  // eslint-disable-next-line no-unused-vars
   setDate: (date: Date) => void;
   nextDisabled: boolean;
   prevDisabled: boolean;
@@ -21,9 +20,7 @@ interface HeaderProps {
     navWrap?: string;
     nav?: string;
   };
-  // eslint-disable-next-line no-unused-vars
   renderPrevIcon?: (disabled?: boolean) => ReactNode;
-  // eslint-disable-next-line no-unused-vars
   renderNextIcon?: (disabled?: boolean) => ReactNode;
   selectProps?: SelectProps<number>;
 }

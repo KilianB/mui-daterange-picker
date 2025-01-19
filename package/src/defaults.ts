@@ -12,8 +12,7 @@ import {
   Locale,
 } from "date-fns";
 
-// eslint-disable-next-line no-unused-vars
-import { DefinedRange } from "./types";
+import type { DefinedRange } from "./types";
 
 export const getDefaultRanges = (date: Date, locale?: Locale): DefinedRange[] => [
   {

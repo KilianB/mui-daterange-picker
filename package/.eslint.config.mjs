@@ -49,7 +49,6 @@ export default [
       "react/jsx-props-no-spreading": "off",
       "import/extensions": "off",
       "react/function-component-definition": "off",
-      "no-unused-vars": "warn",
     },
     ignores: ["node_modules/**"],
   },

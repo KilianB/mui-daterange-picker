@@ -27,15 +27,11 @@ export interface MenuProps {
   setSecondMonth: Setter<Date>;
   setDateRange: Setter<DateRange>;
   helpers: {
-    // eslint-disable-next-line no-unused-vars
     inHoverRange: (day: Date) => boolean;
   };
   handlers: {
-    // eslint-disable-next-line no-unused-vars
     onDayClick: (day: Date) => void;
-    // eslint-disable-next-line no-unused-vars
     onDayHover: (day: Date) => void;
-    // eslint-disable-next-line no-unused-vars
     onMonthNavigate: (marker: symbol, action: NavigationAction) => void;
   };
   locale?: Locale;
@@ -49,7 +45,6 @@ export interface MenuProps {
     valueContainer?: string;
     valueItem?: string;
   };
-  // eslint-disable-next-line no-unused-vars
   renderValue?: (valueType: "start" | "end", _?: Date, locale?: Locale) => ReactNode;
   renderHeader?: (args: CustomComponentRenderer) => ReactNode;
   hideRangeArrow?: boolean;

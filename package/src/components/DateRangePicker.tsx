@@ -1,4 +1,15 @@
-import { addMonths, addYears, isAfter, isBefore, isSameDay, isSameMonth, isWithinInterval, Locale, max, min } from "date-fns";
+import {
+  addMonths,
+  addYears,
+  isAfter,
+  isBefore,
+  isSameDay,
+  isSameMonth,
+  isWithinInterval,
+  Locale,
+  max,
+  min,
+} from "date-fns";
 import * as React from "react";
 import { getDefaultRanges } from "../defaults";
 import { DateRange, DefinedRange, NavigationAction } from "../types";
@@ -40,7 +51,6 @@ export interface DateRangePickerProps {
   definedRanges?: DefinedRange[];
   minDate?: Date | string;
   maxDate?: Date | string;
-  // eslint-disable-next-line no-unused-vars
   onChange: (dateRange: DateRange) => void;
   locale?: Locale;
   DefinedRangesProps?: Pick<DefinedRangesProps, "className" | "classes" | "allowCustomRangeLabel" | "customRangeLabel">;
