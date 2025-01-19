@@ -1,10 +1,15 @@
 {
-    "name": "@ks-erp/mui-daterange-picker",
-    "version": "1.1.7",
+    "name": "@kilianb/mui-daterange-picker",
+    "version": "1.0.0",
     "description": "A react date range picker implementation using @mui.",
-    "author": "ricard33",
+    "author": "Kilian Brachtendorf",
+    "contributors": [
+        {
+            "name": "ricard33"
+        }
+    ],
     "license": "MIT",
-    "repository": "duypv98/mui-daterange-picker",
+    "repository": "kilianB/mui-daterange-picker",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "jsnext:main": "dist/index.es.js",
