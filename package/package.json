@@ -18,7 +18,7 @@
     "scripts": {
         "lint": "eslint ./src --c ./.eslint.config.mjs",
         "build": "rm -rf dist && tsc",
-        "build:fast": "tsc",
+        "build:fast": "tsc --watch",
         "copy_publish_files": "cp ../README.md .",
         "prepublish": "yarn run build && yarn run copy_publish_files"
     },
