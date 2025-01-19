@@ -1,7 +1,7 @@
 import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import { Box, Button, Divider, Grid, Paper, Typography, ButtonProps, IconButton } from "@mui/material";
 import { differenceInCalendarMonths, format } from "date-fns";
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode } from "react";
 import { DateRange, DefinedRange, NavigationAction, Setter } from "../types";
 import DefinedRanges, { DefinedRangesProps } from "./DefinedRanges";
 import { MARKERS } from "./Markers";
@@ -59,6 +59,7 @@ export interface MenuProps {
   MonthHeaderProps?: MonthProps["MonthHeaderProps"];
   MonthDayProps?: MonthProps["DayProps"];
   hideCloseButton?: boolean;
+  singleMonth?: boolean;
   closeButtonProps?: {
     label?: string;
     hideDivider?: boolean;
@@ -66,6 +67,13 @@ export interface MenuProps {
       wrapper?: string;
     };
     buttonProps?: ButtonProps;
+  };
+
+  nextButtonProps?: {
+    style?: CSSProperties;
+  };
+  prevButtonProps?: {
+    style?: CSSProperties;
   };
   toggle: () => void;
 }
@@ -82,6 +90,7 @@ const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps
     setSecondMonth,
     setDateRange,
     helpers,
+    singleMonth,
     handlers,
     locale,
     DefinedRangesProps,
@@ -95,6 +104,8 @@ const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps
     className,
     hideCloseButton,
     renderHeader,
+    nextButtonProps,
+    prevButtonProps,
     toggle,
     classes = {
       rangesMenuDivider: "",
@@ -125,7 +136,12 @@ const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps
         </Grid>
         <Divider orientation="vertical" flexItem className={classes.rangesMenuDivider} />
         <Grid>
-          <Grid container className={classes.valueContainer} sx={{ padding: "20px 70px" }} alignItems="center">
+          <Grid
+            container
+            className={classes.valueContainer}
+            sx={{ padding: singleMonth ? "20px" : "20px 70px" }}
+            alignItems="center"
+          >
             {renderHeader ? (
               <Grid item className={classes.valueItem} sx={{ flex: 1 }}>
                 {renderHeader({
@@ -173,14 +189,16 @@ const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps
               locale={locale}
             />
             {!hideMonthDivider && <Divider orientation="vertical" flexItem />}
-            <Month
-              {...commonProps}
-              value={secondMonth}
-              setValue={setSecondMonth}
-              navState={[canNavigateCloser, true]}
-              marker={MARKERS.SECOND_MONTH}
-              locale={locale}
-            />
+            {!singleMonth && (
+              <Month
+                {...commonProps}
+                value={secondMonth}
+                setValue={setSecondMonth}
+                navState={[canNavigateCloser, true]}
+                marker={MARKERS.SECOND_MONTH}
+                locale={locale}
+              />
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -211,6 +229,7 @@ const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps
             firstMonth.getMonth() > minDate.getMonth() || firstMonth.getFullYear() > minDate.getFullYear()
               ? "inherit"
               : "none",
+          ...prevButtonProps?.style,
         }}
       >
         <IconButton
@@ -238,6 +257,7 @@ const Menu: React.FunctionComponent<MenuProps> = React.forwardRef<any, MenuProps
             secondMonth.getMonth() < maxDate.getMonth() || secondMonth.getFullYear() < maxDate.getFullYear()
               ? "inherit"
               : "none",
+          ...nextButtonProps?.style,
         }}
       >
         <IconButton

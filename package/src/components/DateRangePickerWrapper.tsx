@@ -26,6 +26,8 @@ export interface DateRangePickerWrapperProps {
   CloseButtonProps?: DateRangePickerProps["CloseButtonProps"];
   anchorRef: DateRangePickerProps["anchorRef"];
   popperModifiers: DateRangePickerProps["popperModifiers"];
+  nextButtonProps?: DateRangePickerProps["nextButtonProps"];
+  prevButtonProps?: DateRangePickerProps["prevButtonProps"];
 }
 
 const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (

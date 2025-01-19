@@ -53,6 +53,7 @@ export interface DateRangePickerProps {
     | "hideMonthDivider"
     | "hideCloseButton"
     | "renderHeader"
+    | "singleMonth"
   >;
   MonthProps?: MenuProps["MonthProps"];
   MonthHeaderProps?: MenuProps["MonthHeaderProps"];
@@ -61,6 +62,8 @@ export interface DateRangePickerProps {
   anchorRef: React.RefObject<HTMLElement | null>;
   closeOnClickOutside?: boolean;
   popperModifiers: PopperProps["modifiers"];
+  nextButtonProps?: MenuProps["nextButtonProps"];
+  prevButtonProps?: MenuProps["prevButtonProps"];
 }
 
 const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (props: DateRangePickerProps) => {
@@ -83,6 +86,8 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (props: D
     CloseButtonProps,
     anchorRef,
     popperModifiers,
+    nextButtonProps,
+    prevButtonProps,
     toggle,
   } = props;
 
@@ -195,7 +200,7 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (props: D
   };
 
   return (
-    <Popper open={open} anchorEl={anchorRef && anchorRef.current} sx={{ zIndex: 1 }} modifiers={popperModifiers}>
+    <Popper open={open} anchorEl={anchorRef && anchorRef.current} style={{ zIndex: 5 }} modifiers={popperModifiers}>
       <ConditionalClickAwayListener enabled={closeOnClickOutside !== false} onClickAway={handleClose}>
         <Menu
           dateRange={dateRange}
@@ -216,6 +221,8 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (props: D
           MonthDayProps={MonthDayProps}
           toggle={toggle}
           closeButtonProps={CloseButtonProps}
+          nextButtonProps={nextButtonProps}
+          prevButtonProps={prevButtonProps}
           {...MenuProps}
         />
       </ConditionalClickAwayListener>
